@@ -1,0 +1,1450 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}@media (min-width:761px){
+  body.slides .book{padding-top:12px}
+  body.slides .sheet{width:min(1500px,calc(100% - 32px));max-width:1500px;height:calc(100vh - 146px);height:calc(100dvh - 146px);min-height:520px}
+  body.slides .sheet.current:not(.cover):not(#contents){grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);padding:34px 52px 22px}
+}
+@media (prefers-reduced-motion:no-preference){
+  @keyframes pageReveal{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes imageReveal{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+  body.paged .sheet.current{animation:pageReveal .32s ease-out both}
+  body.paged .sheet.current .imgbox img{animation:imageReveal .52s cubic-bezier(.2,.8,.2,1) both}
+}/* Full-page Slides view: scroll the whole page instead of a small text panel. */
+body.slides .book{width:100%;max-width:none;padding:12px 16px 72px}
+body.slides .sheet{width:min(1600px,100%);max-width:1600px;height:auto!important;min-height:0;overflow:visible!important;margin-bottom:12px}
+@media (min-width:761px){
+  body.slides .sheet.current:not(.cover):not(#contents){grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);grid-template-rows:auto auto auto;align-items:start}
+  body.slides .sheet:not(.cover):not(#contents)>.imgwrap{align-self:start}
+  body.slides .sheet:not(.cover):not(#contents)>.text{min-height:0;overflow:visible;font-size:clamp(17px,1.55vw,22px);padding-right:0}
+}/* Paw Wise browser badge */
+.paw-badge{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;background:var(--yellow);border:2px solid var(--yellow-deep);border-radius:12px;box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.paw-badge svg{width:28px;height:28px;fill:#6b421f}
+@media (max-width:560px){.paw-badge{width:36px;height:36px;flex-basis:36px;border-radius:10px}.paw-badge svg{width:24px;height:24px}}</style></head><body>
+<title>Everything About Cats</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Literata:opsz,wght@7..72,400;7..72,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a desk of white book sheets stacked in a column; each sheet has a heading, a picture box with its prompt, then the exact text. */
+:root{
+  --desk:#fff0a8; --bar:#1d1a10; --bar-ink:#ffd21f; --bar-line:#4d4312;
+  --yellow:#ffd21f; --yellow-deep:#f2b705; --yellow-soft:#fff4c2;
+  --paper:#ffffff; --ink:#1d1a10; --muted:#5a4f1c; --accent:#8a5f00; --accent-soft:#fff4c2; --line:#eadb9a; --box:#fff8d6;
+  --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Literata",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--desk:#1a1600;--bar:#0f0d05;--bar-ink:#ffd21f;--bar-line:#4d4312;color-scheme:dark}}
+:root[data-theme="dark"]{--desk:#1a1600;--bar:#0f0d05;--bar-ink:#ffd21f;--bar-line:#4d4312;color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--desk);color:var(--bar-ink);font-family:var(--body);padding-block:0 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bar);z-index:20}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:15;margin-inline:calc(-1*max(16px,env(safe-area-inset-left,0px))) calc(-1*max(16px,env(safe-area-inset-right,0px)));padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));background:var(--bar);border-bottom:1px solid var(--bar-line);display:flex;gap:10px 14px;align-items:center;flex-wrap:wrap;font-family:var(--mono);font-size:12px}
+.bar b{font-family:var(--display);font-size:15px;font-weight:800;letter-spacing:-.01em;margin-right:auto}
+.bar a,.bar button{font:inherit;color:var(--bar-ink);background:none;border:1px solid var(--bar-line);border-radius:6px;padding:6px 10px;cursor:pointer;text-decoration:none}
+.bar a:hover,.bar button:hover{border-color:var(--bar-ink);background:rgba(255,210,31,.12)}
+.count{opacity:.8}
+.book{display:flex;flex-direction:column;gap:28px;align-items:center;padding-top:28px}
+.sheet{background:var(--paper);color:var(--ink);width:100%;max-width:800px;padding:56px 56px 36px;box-shadow:0 1px 2px rgba(0,0,0,.12),0 10px 30px rgba(0,0,0,.10);border-radius:2px;border-top:10px solid var(--yellow);min-width:0;display:flex;flex-direction:column;gap:22px}
+.opener,.cover{background:var(--yellow);border-top-color:var(--ink);--muted:#4a3d00;--line:#c9a000;--accent:#1d1a10;--accent-soft:#fff4c2;--box:#fff8d6}
+.sec span{background:linear-gradient(transparent 58%,var(--yellow) 58%);-webkit-box-decoration-break:clone;box-decoration-break:clone;padding:0 .18em;margin-left:-.18em}
+.sheet h1{font-family:var(--display);font-weight:800;font-size:clamp(34px,6.4vw,58px);line-height:1.02;letter-spacing:-.025em;margin:6px 0 0;text-wrap:balance}
+.subtitle{font-family:var(--display);font-weight:600;font-size:clamp(18px,2.6vw,24px);margin:0;color:var(--accent)}
+.tagline{margin:0;color:var(--muted);font-size:16px}
+.label{font-family:var(--mono);font-weight:500;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0}
+.chtitle{font-family:var(--display);font-weight:800;font-size:clamp(30px,5vw,46px);line-height:1.05;letter-spacing:-.02em;margin:0;text-wrap:balance}
+.sec{font-family:var(--display);font-weight:800;font-size:clamp(22px,3.6vw,30px);line-height:1.15;letter-spacing:-.015em;margin:0;text-wrap:balance}
+.opener{gap:18px}
+.text{display:flex;flex-direction:column;gap:14px;font-size:17px;line-height:1.7;max-width:65ch}
+.text p,.text ul,.text ol{margin:0}
+.text ul,.text ol{padding-left:1.3em;display:flex;flex-direction:column;gap:4px}
+.text ul.check{list-style:none;padding-left:0}
+.text ul.check label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.text ul.check input{margin-top:.5em;width:18px;height:18px;accent-color:var(--yellow-deep);flex:none}
+.sub{font-family:var(--display);font-size:19px;padding-top:6px}
+.callout{background:var(--yellow-soft);border-left:6px solid var(--yellow-deep);padding:14px 18px;border-radius:2px;font-weight:400}
+.text a{color:var(--accent);overflow-wrap:anywhere}
+.text:empty{display:none}
+.sheet footer{margin-top:auto;padding-top:14px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--muted)}
+.sheet footer span{min-width:0}
+.num{font-weight:500;background:var(--yellow);color:var(--ink);padding:1px 9px;border-radius:99px}
+.opener .num,.cover .num{background:var(--ink);color:var(--yellow)}
+.text li::marker{color:var(--yellow-deep)}
+.cover{padding-block:64px 44px}
+.toc{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.toc a{display:grid;grid-template-columns:minmax(96px,150px) 1fr auto;gap:12px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--line);color:var(--ink);text-decoration:none}
+.toc a:hover .tt{color:var(--accent)}
+.tl{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.tt{font-family:var(--display);font-weight:600;font-size:17px;min-width:0}
+.tn{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.note{font-size:14px;line-height:1.6;color:var(--muted);margin:0;max-width:65ch}
+
+/* paw-print watermarks */
+.sheet{position:relative;overflow:hidden}
+.sheet>*{position:relative;z-index:1}
+.sheet::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background-repeat:no-repeat;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-12 -12 124 124'%3E%3Cg transform='rotate(22 50 50)' fill='%23ffd21f' fill-opacity='0.5'%3E%3Cellipse cx='50' cy='68' rx='23' ry='19'/%3E%3Cellipse cx='20' cy='44' rx='9' ry='12' transform='rotate(-22 20 44)'/%3E%3Cellipse cx='39' cy='26' rx='9' ry='12' transform='rotate(-8 39 26)'/%3E%3Cellipse cx='61' cy='26' rx='9' ry='12' transform='rotate(8 61 26)'/%3E%3Cellipse cx='80' cy='44' rx='9' ry='12' transform='rotate(22 80 44)'/%3E%3C/g%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-12 -12 124 124'%3E%3Cg transform='rotate(-28 50 50)' fill='%23ffd21f' fill-opacity='0.5'%3E%3Cellipse cx='50' cy='68' rx='23' ry='19'/%3E%3Cellipse cx='20' cy='44' rx='9' ry='12' transform='rotate(-22 20 44)'/%3E%3Cellipse cx='39' cy='26' rx='9' ry='12' transform='rotate(-8 39 26)'/%3E%3Cellipse cx='61' cy='26' rx='9' ry='12' transform='rotate(8 61 26)'/%3E%3Cellipse cx='80' cy='44' rx='9' ry='12' transform='rotate(22 80 44)'/%3E%3C/g%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-12 -12 124 124'%3E%3Cg transform='rotate(35 50 50)' fill='%23ffd21f' fill-opacity='0.5'%3E%3Cellipse cx='50' cy='68' rx='23' ry='19'/%3E%3Cellipse cx='20' cy='44' rx='9' ry='12' transform='rotate(-22 20 44)'/%3E%3Cellipse cx='39' cy='26' rx='9' ry='12' transform='rotate(-8 39 26)'/%3E%3Cellipse cx='61' cy='26' rx='9' ry='12' transform='rotate(8 61 26)'/%3E%3Cellipse cx='80' cy='44' rx='9' ry='12' transform='rotate(22 80 44)'/%3E%3C/g%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-12 -12 124 124'%3E%3Cg transform='rotate(35 50 50)' fill='%23ffd21f' fill-opacity='0.5'%3E%3Cellipse cx='50' cy='68' rx='23' ry='19'/%3E%3Cellipse cx='20' cy='44' rx='9' ry='12' transform='rotate(-22 20 44)'/%3E%3Cellipse cx='39' cy='26' rx='9' ry='12' transform='rotate(-8 39 26)'/%3E%3Cellipse cx='61' cy='26' rx='9' ry='12' transform='rotate(8 61 26)'/%3E%3Cellipse cx='80' cy='44' rx='9' ry='12' transform='rotate(22 80 44)'/%3E%3C/g%3E%3C/svg%3E");
+ background-size:150px,100px,52px,52px;
+ background-position:right -24px top 84px,left -20px bottom 110px,right 120px bottom 60px,right 60px bottom 120px}
+.sheet:nth-of-type(even)::before{background-position:left -24px top 84px,right -20px bottom 110px,left 120px bottom 60px,left 60px bottom 120px}
+.opener::before,.cover::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-12 -12 124 124'%3E%3Cg transform='rotate(22 50 50)' fill='%231d1a10' fill-opacity='0.09'%3E%3Cellipse cx='50' cy='68' rx='23' ry='19'/%3E%3Cellipse cx='20' cy='44' rx='9' ry='12' transform='rotate(-22 20 44)'/%3E%3Cellipse cx='39' cy='26' rx='9' ry='12' transform='rotate(-8 39 26)'/%3E%3Cellipse cx='61' cy='26' rx='9' ry='12' transform='rotate(8 61 26)'/%3E%3Cellipse cx='80' cy='44' rx='9' ry='12' transform='rotate(22 80 44)'/%3E%3C/g%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-12 -12 124 124'%3E%3Cg transform='rotate(-28 50 50)' fill='%231d1a10' fill-opacity='0.09'%3E%3Cellipse cx='50' cy='68' rx='23' ry='19'/%3E%3Cellipse cx='20' cy='44' rx='9' ry='12' transform='rotate(-22 20 44)'/%3E%3Cellipse cx='39' cy='26' rx='9' ry='12' transform='rotate(-8 39 26)'/%3E%3Cellipse cx='61' cy='26' rx='9' ry='12' transform='rotate(8 61 26)'/%3E%3Cellipse cx='80' cy='44' rx='9' ry='12' transform='rotate(22 80 44)'/%3E%3C/g%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-12 -12 124 124'%3E%3Cg transform='rotate(35 50 50)' fill='%231d1a10' fill-opacity='0.09'%3E%3Cellipse cx='50' cy='68' rx='23' ry='19'/%3E%3Cellipse cx='20' cy='44' rx='9' ry='12' transform='rotate(-22 20 44)'/%3E%3Cellipse cx='39' cy='26' rx='9' ry='12' transform='rotate(-8 39 26)'/%3E%3Cellipse cx='61' cy='26' rx='9' ry='12' transform='rotate(8 61 26)'/%3E%3Cellipse cx='80' cy='44' rx='9' ry='12' transform='rotate(22 80 44)'/%3E%3C/g%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-12 -12 124 124'%3E%3Cg transform='rotate(35 50 50)' fill='%231d1a10' fill-opacity='0.09'%3E%3Cellipse cx='50' cy='68' rx='23' ry='19'/%3E%3Cellipse cx='20' cy='44' rx='9' ry='12' transform='rotate(-22 20 44)'/%3E%3Cellipse cx='39' cy='26' rx='9' ry='12' transform='rotate(-8 39 26)'/%3E%3Cellipse cx='61' cy='26' rx='9' ry='12' transform='rotate(8 61 26)'/%3E%3Cellipse cx='80' cy='44' rx='9' ry='12' transform='rotate(22 80 44)'/%3E%3C/g%3E%3C/svg%3E");background-size:230px,150px,70px,70px;
+ background-position:right -40px top 60px,left -30px bottom 90px,right 150px bottom 50px,right 80px bottom 130px}
+.bp{width:18px;height:18px;vertical-align:-3px;margin-right:6px;fill:currentColor}
+
+/* title page, back cover, page-by-page mode */
+.h1like{font-family:var(--display);font-weight:800;font-size:clamp(34px,6.4vw,58px);line-height:1.02;letter-spacing:-.025em;margin:6px 0 0;text-wrap:balance}
+.titlepage{justify-content:center;align-items:flex-start;gap:18px;min-height:520px}
+.bigpaw{width:88px;height:88px;fill:var(--ink);margin-bottom:6px}
+.by{margin:10px 0 0;font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
+.author{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:0;text-transform:none;color:var(--ink);min-width:8ch;border-bottom:2px solid var(--ink);outline:none;padding:0 4px}
+.author:empty::before{content:attr(data-ph);opacity:.45}
+.author:focus-visible{background:rgba(255,255,255,.55)}
+.backcover{gap:20px}
+.bq{font-family:var(--display);font-weight:800;font-size:clamp(26px,4.6vw,40px);line-height:1.1;letter-spacing:-.02em;margin:0;text-wrap:balance}
+.sheet{scroll-margin-top:72px}
+body.paged .sheet:not(.current){display:none}
+body.paged .sheet{min-height:min(74vh,900px)}
+body.paged{padding-bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+.nav{display:none;position:fixed;left:0;right:0;bottom:0;z-index:18;background:var(--bar);border-top:1px solid var(--bar-line);padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));gap:10px;align-items:center;font-family:var(--mono);font-size:12px;color:var(--bar-ink)}
+body.paged .nav{display:flex}
+.nav button,.nav select{font:inherit;font-size:13px;color:var(--bar-ink);background:none;border:1px solid var(--bar-line);border-radius:6px;padding:9px 14px;cursor:pointer;min-height:40px}
+.nav select{flex:1;min-width:0;max-width:340px;margin-left:auto;background:var(--bar)}
+.nav #next{background:var(--yellow);color:#1d1a10;border-color:var(--yellow);font-weight:500}
+.nav button:disabled{opacity:.35;cursor:default}
+.nav button:focus-visible,.nav select:focus-visible{outline:3px solid var(--bar-ink);outline-offset:2px}
+.pageno{white-space:nowrap}
+@media (max-width:560px){.nav select{display:none}.pageno{margin-inline:auto}.titlepage{min-height:420px}}
+/* picture box */
+.imgwrap{display:flex;flex-direction:column;gap:10px;min-width:0}
+.imgbox{position:relative;width:100%;max-width:100%;border:2px dashed #cfa500;border-radius:6px;background:var(--box);overflow:hidden}
+.r169,.r21{aspect-ratio:16/9}
+.imgbox.drag{border-color:var(--ink);background:var(--yellow)}
+.imgbox[data-state="full"]{border:1px solid var(--line)}
+.imgbox img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.pick{position:absolute;inset:0;width:100%;height:100%;border:0;background:none;color:#7a5a00;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;font-family:var(--mono);padding:12px}
+.pick:hover,.pick:focus-visible{color:var(--ink);background:rgba(255,210,31,.28)}
+.pick:focus-visible,.bar a:focus-visible,.bar button:focus-visible{outline:3px solid var(--ink);outline-offset:2px;box-shadow:0 0 0 5px var(--yellow)}
+.pt{font-size:14px;font-weight:500;color:var(--ink)}
+.ps{font-size:12px;color:var(--muted)}
+.imgbox[data-state="full"] .pick{display:none}
+@media (max-width:560px){.sheet{padding:30px 22px 24px}.cover{padding-block:36px 28px}.toc a{grid-template-columns:1fr auto}.tl{grid-column:1/-1}.text{font-size:16px}}
+@media (prefers-reduced-motion:no-preference){.mini,.pick,.imgbox{transition:background .15s,border-color .15s,color .15s}}
+
+
+/* slide view, view switch, read aloud */
+.hd{display:contents}
+.seg{display:flex;border:1px solid var(--bar-line);border-radius:6px;overflow:hidden}
+.bar .seg button{border:0;border-radius:0;border-right:1px solid var(--bar-line)}
+.bar .seg button:last-child{border-right:0}
+.bar .seg button[aria-pressed="true"],.bar .seg button[aria-pressed="true"]:hover{background:var(--yellow);color:#1d1a10;font-weight:500}
+.nav{flex-wrap:wrap}
+.nav #listen{border-color:var(--bar-ink)}
+.nav #listen[aria-pressed="true"]{background:var(--bar-ink);color:var(--bar)}
+#vpanel{position:fixed;z-index:19;left:max(16px,env(safe-area-inset-left,0px));bottom:calc(76px + env(safe-area-inset-bottom,0px));width:min(380px,calc(100% - 32px));background:var(--bar);color:var(--bar-ink);border:1px solid var(--bar-line);border-top:6px solid var(--yellow);border-radius:8px;padding:14px;display:none;flex-direction:column;gap:12px;font-size:13px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+body.paged #vpanel:not([hidden]){display:flex}
+#vpanel label{display:flex;flex-direction:column;gap:5px;font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase}
+#vpanel select{font:inherit;font-size:14px;letter-spacing:0;text-transform:none;padding:9px 10px;border-radius:6px;border:1px solid var(--bar-line);background:var(--paper);color:var(--ink);min-width:0;width:100%}
+#vpanel label.ck{flex-direction:row;align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-family:var(--body);font-size:14px;cursor:pointer}
+#vpanel .ck input{width:18px;height:18px;accent-color:var(--yellow-deep)}
+#vpanel .vnote{margin:0;opacity:.8;font-size:12.5px;line-height:1.5}
+#vpanel select:focus-visible,#vpanel input:focus-visible{outline:3px solid var(--bar-ink);outline-offset:2px}
+@media (max-width:560px){.nav button{padding:9px 10px}.nav{gap:8px}body.paged{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}#vpanel{bottom:calc(112px + env(safe-area-inset-bottom,0px))}}
+@media (max-width:760px){#fs{display:none!important}}
+@media (min-width:761px){
+ body.slides .book{padding-top:18px}
+ body.slides .sheet{max-width:1320px;height:calc(100vh - 210px);height:calc(100dvh - 210px);min-height:380px;overflow:hidden}
+ body.slides .sheet.current:not(.cover):not(#contents){display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;column-gap:40px;row-gap:14px;padding:30px 40px 18px}
+ body.slides .sheet:not(.cover):not(#contents)>.hd{display:flex;flex-direction:column;gap:8px;grid-column:2;grid-row:1;align-self:end}
+ body.slides .sheet:not(.cover):not(#contents)>.imgwrap{grid-column:1;grid-row:1/3;align-self:center}
+ body.slides .sheet:not(.cover):not(#contents)>.text{grid-column:2;grid-row:2;min-height:0;overflow:auto;font-size:clamp(16px,1.45vw,21px);line-height:1.65;padding-right:8px;max-width:none}
+ body.slides .sheet:not(.cover):not(#contents)>footer{grid-column:1/-1;grid-row:3}
+ body.slides .sheet.cover,body.slides #contents{overflow:auto;justify-content:center}
+ body.slides .sheet.cover .imgwrap{width:min(720px,100%)}
+ body.slides .sheet.titlepage{min-height:0}
+}
+/* image frame */
+.imgwrap{position:relative;--frame:var(--yellow);--mat:#ffffff}
+.opener,.cover{--frame:var(--ink)}
+.imgbox{margin:12px 12px 4px;width:calc(100% - 24px);border-radius:3px;box-shadow:0 0 0 7px var(--mat),0 0 0 9px var(--ink),0 0 0 17px var(--frame),0 0 0 18px var(--ink),0 8px 20px rgba(29,26,16,.18)}
+.imgbox[data-state="full"]{border:0}
+.imgwrap::after{content:"";position:absolute;top:-2px;right:-2px;width:38px;height:38px;border-radius:50%;background:var(--yellow) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-12 -12 124 124'%3E%3Cg fill='%231d1a10'%3E%3Cellipse cx='50' cy='68' rx='23' ry='19'/%3E%3Cellipse cx='20' cy='44' rx='9' ry='12' transform='rotate(-22 20 44)'/%3E%3Cellipse cx='39' cy='26' rx='9' ry='12' transform='rotate(-8 39 26)'/%3E%3Cellipse cx='61' cy='26' rx='9' ry='12' transform='rotate(8 61 26)'/%3E%3Cellipse cx='80' cy='44' rx='9' ry='12' transform='rotate(22 80 44)'/%3E%3C/g%3E%3C/svg%3E") center/22px no-repeat;border:2px solid var(--ink);z-index:2;pointer-events:none}
+.opener .imgwrap::after,.cover .imgwrap::after{background-color:#ffffff}
+@media (max-width:560px){.imgbox{margin:10px 10px 2px;width:calc(100% - 20px)}.imgwrap::after{width:32px;height:32px;background-size:18px}}
+</style>
+
+<div class="bar">
+  <span class="paw-badge" aria-label="Paw Wise"><svg viewBox="-12 -12 124 124" aria-hidden="true"><ellipse cx="50" cy="68" rx="23" ry="19"/><ellipse cx="20" cy="44" rx="9" ry="12" transform="rotate(-22 20 44)"/><ellipse cx="39" cy="26" rx="9" ry="12" transform="rotate(-8 39 26)"/><ellipse cx="61" cy="26" rx="9" ry="12" transform="rotate(8 61 26)"/><ellipse cx="80" cy="44" rx="9" ry="12" transform="rotate(22 80 44)"/></svg></span>
+  <b><svg class='bp' viewBox='-12 -12 124 124' aria-hidden='true'><ellipse cx='50' cy='68' rx='23' ry='19'/><ellipse cx='20' cy='44' rx='9' ry='12' transform='rotate(-22 20 44)'/><ellipse cx='39' cy='26' rx='9' ry='12' transform='rotate(-8 39 26)'/><ellipse cx='61' cy='26' rx='9' ry='12' transform='rotate(8 61 26)'/><ellipse cx='80' cy='44' rx='9' ry='12' transform='rotate(22 80 44)'/></svg>Everything You Need to Know About Cats</b>
+  <span class="count" id="count">0 images added</span>
+  <a href="#contents">Contents</a>
+  <div class="seg" role="group" aria-label="View"><button type="button" data-mode="paged" aria-pressed="true">Pages</button><button type="button" data-mode="slides" aria-pressed="false">Slides</button><button type="button" data-mode="scroll" aria-pressed="false">Scroll</button></div>
+  <button type="button" id="fs" hidden>Full screen</button>
+</div>
+<main class="book">
+<section class="sheet cover" id="cover" data-nav="Cover"><h1>EVERYTHING YOU NEED TO KNOW ABOUT CATS</h1><p class="subtitle">The Complete Beginner's Guide to Raising a Happy, Healthy Cat</p><p class="tagline"><em>A practical handbook for first-time cat owners</em></p><div class="imgwrap" data-key="cover">
+<div class="imgbox r169 big" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/1 Cat_sitting_on_windowsill_91d99a9e_2K.jpg" alt="Cat illustration 1">
+</div>
+</div></section>
+<section class="sheet cover titlepage" id="titlepage" data-nav="Title page"><svg class="bigpaw" viewBox="-12 -12 124 124" aria-hidden="true"><ellipse cx="50" cy="68" rx="23" ry="19"/><ellipse cx="20" cy="44" rx="9" ry="12" transform="rotate(-22 20 44)"/><ellipse cx="39" cy="26" rx="9" ry="12" transform="rotate(-8 39 26)"/><ellipse cx="61" cy="26" rx="9" ry="12" transform="rotate(8 61 26)"/><ellipse cx="80" cy="44" rx="9" ry="12" transform="rotate(22 80 44)"/></svg><h2 class="h1like">EVERYTHING YOU NEED TO KNOW ABOUT CATS</h2><p class="subtitle">The Complete Beginner's Guide to Raising a Happy, Healthy Cat</p><p class="tagline"><em>A practical handbook for first-time cat owners</em></p><p class="by">Written by <span class="author">Paw Wise</span></p></section>
+<section class="sheet" id="contents" data-nav="Contents"><h3 class="sec"><span>Contents</span></h3>
+<ol class="toc"><li><a href="#introduction"><span class="tl">Introduction</span><span class="tt">Welcome to the World of Cats!</span><span class="tn">2</span></a></li><li><a href="#chapter1"><span class="tl">Chapter 1</span><span class="tt">Understanding Cats</span><span class="tn">3</span></a></li><li><a href="#chapter2"><span class="tl">Chapter 2</span><span class="tt">Choosing the Right Cat</span><span class="tn">8</span></a></li><li><a href="#chapter3"><span class="tl">Chapter 3</span><span class="tt">Preparing Your Home</span><span class="tn">13</span></a></li><li><a href="#chapter4"><span class="tl">Chapter 4</span><span class="tt">Bringing Your Cat Home</span><span class="tn">17</span></a></li><li><a href="#chapter5"><span class="tl">Chapter 5</span><span class="tt">Feeding and Nutrition</span><span class="tn">22</span></a></li><li><a href="#chapter6"><span class="tl">Chapter 6</span><span class="tt">Litter Training and Toilet Habits</span><span class="tn">29</span></a></li><li><a href="#chapter7"><span class="tl">Chapter 7</span><span class="tt">Grooming and Hygiene</span><span class="tn">35</span></a></li><li><a href="#chapter8"><span class="tl">Chapter 8</span><span class="tt">Understanding Cat Behaviour</span><span class="tn">41</span></a></li><li><a href="#chapter9"><span class="tl">Chapter 9</span><span class="tt">Health, Vaccinations and Veterinary Care</span><span class="tn">48</span></a></li><li><a href="#chapter10"><span class="tl">Chapter 10</span><span class="tt">Raising Kittens</span><span class="tn">55</span></a></li><li><a href="#chapter11"><span class="tl">Chapter 11</span><span class="tt">Keeping Indoor Cats Happy and Safe</span><span class="tn">61</span></a></li><li><a href="#chapter12"><span class="tl">Chapter 12</span><span class="tt">Common Mistakes Every New Cat Owner Should Avoid</span><span class="tn">67</span></a></li><li><a href="#bonus1"><span class="tl">Bonus 1</span><span class="tt">The First-Time Cat Owner Checklist</span><span class="tn">78</span></a></li><li><a href="#bonus2"><span class="tl">Bonus 2</span><span class="tt">A Simple Daily Cat Care Routine</span><span class="tn">82</span></a></li><li><a href="#bonus3"><span class="tl">Bonus 3</span><span class="tt">What to Do in a Cat Emergency</span><span class="tn">86</span></a></li><li><a href="#finalword"><span class="tl">Final Word</span><span class="tt">Your Journey as a Cat Owner Starts Here</span><span class="tn">87</span></a></li></ol>
+</section>
+<section class="sheet pg" id="disclaimer" data-nav="Copyright and Disclaimer"><div class="hd"><h3 class="sec"><span>Copyright and Disclaimer</span></h3></div><div class="imgwrap" data-key="disclaimer">
+<div class="imgbox r169" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/2 Veterinarian_examining_cat_on_table_634effed_2K.jpg" alt="Cat illustration 2">
+</div>
+</div><div class="text"><p>Copyright © 2026. All rights reserved.</p>
+<p>This guide is for educational purposes. It is not a replacement for professional veterinary advice, diagnosis or treatment. Every cat is different, and its care requirements may depend on age, health, environment and lifestyle.</p>
+<p>Never give your cat human medication or attempt to treat a serious illness using advice from the internet. Contact a qualified veterinarian whenever you are concerned about your cat's health.</p></div><footer><span>Copyright and Disclaimer</span><span class="num">1</span></footer></section>
+<section class="sheet opener" id="introduction" data-nav="Introduction: Welcome to the World of Cats!"><div class="hd"><p class="label">INTRODUCTION</p><h2 class="chtitle">Welcome to the World of Cats!</h2></div><div class="imgwrap" data-key="introduction">
+<div class="imgbox r169" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/3 Cat_peeking_from_cardboard_carrier_1824e69f_2K.jpg" alt="Cat illustration 3">
+</div>
+</div><div class="text"><p>Bringing a cat into your home can be one of the most rewarding experiences of your life.</p>
+<p>Cats are curious, playful, intelligent and independent animals. Some love sitting on their owner's lap for hours, while others prefer watching everything from a comfortable corner. Some follow their owners around the house, while others enjoy having their own space.</p>
+<p>But owning a cat involves more than providing food and a comfortable place to sleep.</p>
+<p>Your cat depends on you for its safety, nutrition, hygiene, healthcare and emotional well-being. Understanding these responsibilities before bringing a cat home can make the experience easier for both of you.</p>
+<p>This book was created for people who are getting their first cat or have recently welcomed one into their home.</p>
+<p>You do not need to be an expert. You simply need the right information, patience and willingness to learn.</p>
+<p>By the end of this guide, you will understand how to:</p>
+<ul><li>Choose a cat that suits your lifestyle.</li><li>Prepare your home before bringing a cat inside.</li><li>Feed your cat properly.</li><li>Teach your cat to use a litter box.</li><li>Understand common cat behaviours.</li><li>Maintain your cat's hygiene.</li><li>Recognise signs of illness.</li><li>Keep your cat safe, active and comfortable.</li></ul>
+<p>Let's begin!</p></div><footer><span>Introduction  ·  Welcome to the World of Cats!</span><span class="num">2</span></footer></section>
+<section class="sheet opener" id="chapter1" data-nav="Chapter 1: Understanding Cats"><div class="hd"><p class="label">CHAPTER 1</p><h2 class="chtitle">Understanding Cats</h2></div><div class="imgwrap" data-key="chapter1">
+<div class="imgbox r169" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/4 Thoughtful_cat_looking_forward_7c8327be_2K.jpg" alt="Cat illustration 4">
+</div>
+</div><div class="text"><p>Before learning how to care for a cat, it helps to understand how cats think and behave.</p>
+<p>Cats are not small dogs. They have different instincts, communication styles and needs.</p></div><footer><span>Chapter 1  ·  Understanding Cats</span><span class="num">3</span></footer></section>
+<section class="sheet pg" id="p-1.1"><div class="hd"><h3 class="sec"><span>1.1 Cats Are Independent, But They Still Need Attention</span></h3></div><div class="imgwrap" data-key="1.1">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/5 Cat_lounging_on_sofa_b6301c76_2K.jpg" alt="Cat illustration 5">
+</div>
+</div><div class="text"><p>Cats are often described as independent animals. This is partly true.</p>
+<p>Many cats can entertain themselves for short periods, sleep for several hours and enjoy spending time alone. However, independence does not mean they should be ignored.</p>
+<p>Cats need regular interaction, playtime, affection and mental stimulation.</p>
+<p>Some cats enjoy being carried, while others dislike it. Some enjoy sleeping beside their owners, while others prefer their own sleeping areas.</p>
+<p>The important thing is to learn your cat's personality rather than forcing it to behave in a particular way.</p></div><footer><span>Chapter 1  ·  Understanding Cats</span><span class="num">4</span></footer></section>
+<section class="sheet pg" id="p-1.2"><div class="hd"><h3 class="sec"><span>1.2 Cats Communicate Through Their Bodies</span></h3></div><div class="imgwrap" data-key="1.2">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/6 Three_small_cat_portraits_ab32d086_2K.jpg" alt="Cat illustration 6">
+</div>
+</div><div class="text"><p>Cats communicate using sounds, facial expressions, tail movements and body posture.</p>
+<p>Here are some common signals:</p>
+<p><strong>Tail held upright:</strong> Often indicates confidence, friendliness or a positive greeting.</p>
+<p><strong>Slow blinking:</strong> Can indicate relaxation and trust. Try slowly blinking back when your cat looks comfortable.</p>
+<p><strong>Flattened ears:</strong> May indicate fear, irritation or aggression.</p>
+<p><strong>Puffed-up tail:</strong> Usually indicates that the cat feels frightened, threatened or highly excited.</p>
+<p><strong>Hiding:</strong> A cat may hide because it feels nervous, overwhelmed, unwell or simply wants privacy.</p>
+<p><strong>Rubbing against your legs:</strong> Often a friendly greeting and a way of leaving its scent.</p>
+<p>Remember that body language must be interpreted in context. One signal alone does not always tell the whole story.</p></div><footer><span>Chapter 1  ·  Understanding Cats</span><span class="num">5</span></footer></section>
+<section class="sheet pg" id="p-1.3"><div class="hd"><h3 class="sec"><span>1.3 Why Do Cats Sleep So Much?</span></h3></div><div class="imgwrap" data-key="1.3">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/7 Cat_sleeping_in_sunlit_room_bc9c2359_2K.jpg" alt="Cat illustration 7">
+</div>
+</div><div class="text"><p>Cats generally sleep or rest for a large part of the day. Their sleep patterns are influenced by their natural hunting instincts.</p>
+<p>They are often most active around dawn and dusk.</p>
+<p>Do not automatically assume that a sleeping cat is lazy or sick. Resting is normal. However, an unusual increase in sleep combined with poor appetite, weakness or other changes deserves attention.</p></div><footer><span>Chapter 1  ·  Understanding Cats</span><span class="num">6</span></footer></section>
+<section class="sheet pg" id="p-1.4"><div class="hd"><h3 class="sec"><span>1.4 Cats Need Their Own Space</span></h3></div><div class="imgwrap" data-key="1.4">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/8 Cat_resting_in_box_fe673a31_2K.jpg" alt="Cat illustration 8">
+</div>
+</div><div class="text"><p>A cat should have somewhere quiet where it can rest without being disturbed.</p>
+<p>This could be a comfortable bed, a cardboard box or a quiet corner with a soft blanket.</p>
+<p>Avoid forcing your cat to interact with visitors, children or other animals when it wants to retreat.</p>
+<p class="callout"><strong>Remember:</strong> A comfortable cat is one that feels safe enough to choose when it wants attention and when it wants privacy.</p></div><footer><span>Chapter 1  ·  Understanding Cats</span><span class="num">7</span></footer></section>
+<section class="sheet opener" id="chapter2" data-nav="Chapter 2: Choosing the Right Cat"><div class="hd"><p class="label">CHAPTER 2</p><h2 class="chtitle">Choosing the Right Cat</h2></div><div class="imgwrap" data-key="chapter2">
+<div class="imgbox r169" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/9 Three_cats_sitting_together_4e3d0a10_2K.jpg" alt="Cat illustration 9">
+</div>
+</div><div class="text"><p>Choosing your first cat is an important decision. Do not choose an animal based only on its appearance.</p>
+<p>Consider its age, personality, health and the amount of time you can dedicate to it.</p></div><footer><span>Chapter 2  ·  Choosing the Right Cat</span><span class="num">8</span></footer></section>
+<section class="sheet pg" id="p-2.1"><div class="hd"><h3 class="sec"><span>2.1 Kitten or Adult Cat?</span></h3></div><div class="imgwrap" data-key="2.1">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/10 Kitten_and_adult_cat_comparing_6875c1be_2K.jpg" alt="Cat illustration 10">
+</div>
+</div><div class="text"><p>There are advantages to both.</p>
+<p class="sub"><strong>Kittens</strong></p>
+<p>Kittens are young, energetic and curious. Watching them grow can be a wonderful experience.</p>
+<p>However, they require more supervision, frequent meals, socialisation, playtime and veterinary attention.</p>
+<p>They may also need help learning household routines.</p>
+<p class="sub"><strong>Adult cats</strong></p>
+<p>Adult cats often have more established personalities. You may have a better idea of whether they are playful, quiet, affectionate or independent.</p>
+<p>Many adult cats are already familiar with litter boxes and household routines.</p>
+<p>For a busy first-time owner, an adult cat may be an easier starting point.</p></div><footer><span>Chapter 2  ·  Choosing the Right Cat</span><span class="num">9</span></footer></section>
+<section class="sheet pg" id="p-2.2"><div class="hd"><h3 class="sec"><span>2.2 Male or Female?</span></h3></div><div class="imgwrap" data-key="2.2">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/5_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 5">
+</div>
+</div><div class="text"><p>Both male and female cats can make excellent pets.</p>
+<p>Personality is generally more important than sex when choosing a companion.</p>
+<p>Unneutered male cats may be more likely to roam and mark territory. Unspayed female cats experience heat cycles and can become pregnant.</p>
+<p>Discuss spaying or neutering with a veterinarian.</p></div><footer><span>Chapter 2  ·  Choosing the Right Cat</span><span class="num">10</span></footer></section>
+<section class="sheet pg" id="p-2.3"><div class="hd"><h3 class="sec"><span>2.3 Choosing a Healthy Cat</span></h3></div><div class="imgwrap" data-key="2.3">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/6_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 6">
+</div>
+</div><div class="text"><p>When meeting a potential cat, observe its general condition.</p>
+<p>Look for:</p>
+<ul><li>Clear, bright eyes.</li><li>Clean ears without unusual discharge.</li><li>A reasonably clean nose.</li><li>A coat without extensive bald patches.</li><li>Comfortable movement.</li><li>Normal alertness and responsiveness.</li><li>No obvious breathing difficulty.</li></ul>
+<p>A cat that appears weak, struggles to breathe or has persistent discharge should receive veterinary attention.</p>
+<p>A healthy-looking appearance does not guarantee that an animal is free from disease.</p>
+<p>Ask the previous owner, shelter or breeder about:</p>
+<ul><li>Previous vaccinations.</li><li>Deworming and parasite treatment.</li><li>Medical history.</li><li>Current food.</li><li>Age and previous living conditions.</li><li>Whether the cat has been spayed or neutered.</li></ul>
+<p>If possible, adopt through a reputable animal shelter or responsible rescue organisation.</p></div><footer><span>Chapter 2  ·  Choosing the Right Cat</span><span class="num">11</span></footer></section>
+<section class="sheet pg" id="p-2.4"><div class="hd"><h3 class="sec"><span>2.4 Consider Your Lifestyle</span></h3></div><div class="imgwrap" data-key="2.4">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/7_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 7">
+</div>
+</div><div class="text"><p>Before choosing a cat, ask yourself:</p>
+<ul><li>Can I afford regular food and veterinary care?</li><li>Can I spend time playing with and caring for it?</li><li>Is my home safe for a cat?</li><li>Can I provide care when travelling?</li><li>Are other household members comfortable with having a cat?</li></ul>
+<p>A cat is a long-term responsibility. Many cats live well into their teens, and some live longer.</p>
+<p>Do not bring one home unless you are prepared for that commitment.</p></div><footer><span>Chapter 2  ·  Choosing the Right Cat</span><span class="num">12</span></footer></section>
+<section class="sheet opener" id="chapter3" data-nav="Chapter 3: Preparing Your Home"><div class="hd"><p class="label">CHAPTER 3</p><h2 class="chtitle">Preparing Your Home</h2></div><div class="imgwrap" data-key="chapter3">
+<div class="imgbox r169" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/8_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 8">
+</div>
+</div><div class="text"><p>Your home should be ready before your cat arrives.</p>
+<p>A new environment can be frightening, especially for a kitten or a cat that has never lived indoors.</p>
+<p>Preparing a safe space helps your cat adjust more comfortably.</p></div><footer><span>Chapter 3  ·  Preparing Your Home</span><span class="num">13</span></footer></section>
+<section class="sheet pg" id="p-3.1"><div class="hd"><h3 class="sec"><span>3.1 Essential Supplies</span></h3></div><div class="imgwrap" data-key="3.1">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/9_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 9">
+</div>
+</div><div class="text"><p>You do not need to buy every expensive cat accessory. Start with the basics.</p>
+<p class="sub"><strong>Food and water bowls</strong></p>
+<p>Provide separate bowls for food and water. Wash them regularly and keep fresh water available.</p>
+<p class="sub"><strong>Cat food</strong></p>
+<p>Choose nutritionally complete food appropriate for your cat's age and health.</p>
+<p class="sub"><strong>Litter box</strong></p>
+<p>Every indoor cat needs access to a clean litter box.</p>
+<p class="sub"><strong>Cat litter</strong></p>
+<p>Choose a suitable litter that your cat can comfortably use. Unscented litter is a good starting point.</p>
+<p class="sub"><strong>Scratching post</strong></p>
+<p>Cats naturally scratch to maintain their claws, stretch and mark their territory.</p>
+<p>A scratching post can help protect your furniture.</p>
+<p class="sub"><strong>Cat carrier</strong></p>
+<p>A secure carrier is essential for transporting your cat to veterinary appointments.</p>
+<p class="sub"><strong>Bedding</strong></p>
+<p>A soft blanket or comfortable bed gives your cat somewhere to rest.</p>
+<p class="sub"><strong>Toys</strong></p>
+<p>Simple toys can provide exercise and mental stimulation.</p></div><footer><span>Chapter 3  ·  Preparing Your Home</span><span class="num">14</span></footer></section>
+<section class="sheet pg" id="p-3.2"><div class="hd"><h3 class="sec"><span>3.2 Make Your Home Safe</span></h3></div><div class="imgwrap" data-key="3.2">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/10_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 10">
+</div>
+</div><div class="text"><p>Cats are curious and can investigate places you might not expect.</p>
+<p>Before bringing your cat home:</p>
+<ul><li>Secure electrical wires.</li><li>Store cleaning products and chemicals safely.</li><li>Keep human medicines out of reach.</li><li>Remove toxic plants.</li><li>Secure open windows and balconies.</li><li>Keep small objects that could be swallowed away.</li><li>Check washing machines, dryers and cupboards before closing them.</li></ul>
+<p>Be particularly careful with lilies. Many lily species are extremely dangerous to cats. Even exposure to pollen or vase water can cause severe poisoning.</p>
+<p>If you suspect your cat has contacted a poisonous substance, seek veterinary advice immediately.</p></div><footer><span>Chapter 3  ·  Preparing Your Home</span><span class="num">15</span></footer></section>
+<section class="sheet pg" id="p-3.3"><div class="hd"><h3 class="sec"><span>3.3 Create a Safe Room</span></h3></div><div class="imgwrap" data-key="3.3">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/11_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 11">
+</div>
+</div><div class="text"><p>For the first few days, consider giving your cat one quiet room.</p>
+<p>Place its food, water, litter box, bedding and a hiding place in suitable locations.</p>
+<p>Keep the litter box away from food and water.</p>
+<p>Allow the cat to explore gradually instead of giving it unrestricted access to the entire house immediately.</p></div><footer><span>Chapter 3  ·  Preparing Your Home</span><span class="num">16</span></footer></section>
+<section class="sheet opener" id="chapter4" data-nav="Chapter 4: Bringing Your Cat Home"><div class="hd"><p class="label">CHAPTER 4</p><h2 class="chtitle">Bringing Your Cat Home</h2></div><div class="imgwrap" data-key="chapter4">
+<div class="imgbox r169" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/12_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 12">
+</div>
+</div><div class="text"><p>The first few days can determine how comfortable your cat feels in its new environment.</p>
+<p>A cat that has just been moved may be frightened, confused or unusually quiet.</p>
+<p>This is normal for many cats.</p></div><footer><span>Chapter 4  ·  Bringing Your Cat Home</span><span class="num">17</span></footer></section>
+<section class="sheet pg" id="p-4.1"><div class="hd"><h3 class="sec"><span>4.1 The First Day</span></h3></div><div class="imgwrap" data-key="4.1">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/13_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 13">
+</div>
+</div><div class="text"><p>Bring your cat home in a secure carrier.</p>
+<p>Take it to the prepared room and open the carrier. Allow the cat to come out voluntarily.</p>
+<p>Do not pull it out or force it to explore.</p>
+<p>Show it where the litter box, food and water are located.</p>
+<p>Then give it time.</p>
+<p>Some cats begin exploring within minutes. Others may hide for hours or even longer.</p>
+<p>Let your cat adjust at its own pace.</p></div><footer><span>Chapter 4  ·  Bringing Your Cat Home</span><span class="num">18</span></footer></section>
+<section class="sheet pg" id="p-4.2"><div class="hd"><h3 class="sec"><span>4.2 Give Your Cat Time to Trust You</span></h3></div><div class="imgwrap" data-key="4.2">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/14_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 14">
+</div>
+</div><div class="text"><p>Trust develops through consistent, positive experiences.</p>
+<p>Try these simple habits:</p>
+<ul><li>Speak in a calm voice.</li><li>Avoid sudden movements.</li><li>Sit near your cat without forcing contact.</li><li>Offer appropriate treats.</li><li>Play gently with interactive toys.</li><li>Let the cat approach you first.</li></ul>
+<p>Avoid chasing your cat or repeatedly picking it up when it is uncomfortable.</p></div><footer><span>Chapter 4  ·  Bringing Your Cat Home</span><span class="num">19</span></footer></section>
+<section class="sheet pg" id="p-4.3"><div class="hd"><h3 class="sec"><span>4.3 Introducing Other Pets</span></h3></div><div class="imgwrap" data-key="4.3">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/15_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 15">
+</div>
+</div><div class="text"><p>If you already have animals, do not immediately place the new cat in the same room with them.</p>
+<p>Start with separate spaces.</p>
+<p>Allow them to become familiar with each other's scent before introducing them visually and physically.</p>
+<p>Keep early interactions short and supervised.</p>
+<p>Some animals adjust quickly. Others need several days or weeks.</p>
+<p>Never force an interaction that is causing serious fear or aggression.</p></div><footer><span>Chapter 4  ·  Bringing Your Cat Home</span><span class="num">20</span></footer></section>
+<section class="sheet pg" id="p-4.4"><div class="hd"><h3 class="sec"><span>4.4 The First Veterinary Visit</span></h3></div><div class="imgwrap" data-key="4.4">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/16_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 16">
+</div>
+</div><div class="text"><p>Arrange a veterinary examination soon after bringing your cat home.</p>
+<p>Bring any available health records.</p>
+<p>Ask the veterinarian about:</p>
+<ul><li>General health examination.</li><li>Vaccination history.</li><li>Flea and tick prevention.</li><li>Internal parasite control.</li><li>Appropriate food.</li><li>Microchipping or identification.</li><li>Spaying or neutering.</li><li>Dental health.</li></ul>
+<p>If your new cat has an unknown health history and you already own other cats, ask your veterinarian about keeping the newcomer separated until it has been examined and any recommended testing has been completed.</p></div><footer><span>Chapter 4  ·  Bringing Your Cat Home</span><span class="num">21</span></footer></section>
+<section class="sheet opener" id="chapter5" data-nav="Chapter 5: Feeding and Nutrition"><div class="hd"><p class="label">CHAPTER 5</p><h2 class="chtitle">Feeding and Nutrition</h2></div><div class="imgwrap" data-key="chapter5">
+<div class="imgbox r169" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/17_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 17">
+</div>
+</div><div class="text"><p>Food is one of the most important parts of cat care.</p>
+<p>Cats need the correct balance of nutrients to maintain healthy muscles, organs, bones, skin and fur.</p></div><footer><span>Chapter 5  ·  Feeding and Nutrition</span><span class="num">22</span></footer></section>
+<section class="sheet pg" id="p-5.1"><div class="hd"><h3 class="sec"><span>5.1 Cats Are Carnivores</span></h3></div><div class="imgwrap" data-key="5.1">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/18_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 18">
+</div>
+</div><div class="text"><p>Cats are obligate carnivores. This means they depend on nutrients found in animal-based foods.</p>
+<p>They require nutrients such as:</p>
+<ul><li>Protein.</li><li>Fat.</li><li>Taurine.</li><li>Essential fatty acids.</li><li>Vitamins.</li><li>Minerals.</li><li>Water.</li></ul>
+<p>A complete and balanced commercial cat food is usually the simplest way to meet these nutritional requirements.</p>
+<p>Dog food is not an appropriate long-term replacement for cat food because cats have different nutritional needs.</p></div><footer><span>Chapter 5  ·  Feeding and Nutrition</span><span class="num">23</span></footer></section>
+<section class="sheet pg" id="p-5.2"><div class="hd"><h3 class="sec"><span>5.2 Wet Food or Dry Food?</span></h3></div><div class="imgwrap" data-key="5.2">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/19_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 19">
+</div>
+</div><div class="text"><p>Both can be suitable when they are nutritionally complete and appropriate for the cat's life stage.</p>
+<p class="sub"><strong>Wet food</strong></p>
+<p>Advantages include:</p>
+<ul><li>Higher moisture content.</li><li>Often easier for some cats to eat.</li><li>Many cats enjoy its texture and smell.</li></ul>
+<p class="sub"><strong>Dry food</strong></p>
+<p>Advantages include:</p>
+<ul><li>Convenient storage.</li><li>Easy portion measurement.</li><li>Can be convenient for feeding routines.</li></ul>
+<p>Some owners use a combination of both.</p>
+<p>Choose based on your cat's needs, preferences and veterinary advice.</p></div><footer><span>Chapter 5  ·  Feeding and Nutrition</span><span class="num">24</span></footer></section>
+<section class="sheet pg" id="p-5.3"><div class="hd"><h3 class="sec"><span>5.3 Feeding Kittens</span></h3></div><div class="imgwrap" data-key="5.3">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/20_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 20">
+</div>
+</div><div class="text"><p>Kittens grow quickly and need food designed specifically for growth.</p>
+<p>They generally need more frequent meals than adult cats.</p>
+<p>A useful general starting point is:</p>
+<ul><li>Very young kittens: several small meals throughout the day.</li><li>Kittens under four months: commonly three to four meals daily.</li><li>Older kittens: gradually adjust feeding frequency as they grow.</li></ul>
+<p>Follow the food manufacturer's feeding guidance and ask your veterinarian to assess the correct amount.</p>
+<p>Do not give very young kittens ordinary cow's milk as a replacement for their mother's milk or appropriate kitten formula.</p></div><footer><span>Chapter 5  ·  Feeding and Nutrition</span><span class="num">25</span></footer></section>
+<section class="sheet pg" id="p-5.4"><div class="hd"><h3 class="sec"><span>5.4 Feeding Adult Cats</span></h3></div><div class="imgwrap" data-key="5.4">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/21_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 21">
+</div>
+</div><div class="text"><p>Most healthy adult cats can be fed measured meals once or twice daily, depending on their individual needs and veterinary recommendations.</p>
+<p>Avoid repeatedly filling the bowl without measuring how much your cat eats.</p>
+<p>Overfeeding can contribute to obesity.</p>
+<p>Use the feeding instructions on the packaging as a starting point, then adjust based on your cat's weight, activity and body condition.</p></div><footer><span>Chapter 5  ·  Feeding and Nutrition</span><span class="num">26</span></footer></section>
+<section class="sheet pg" id="p-5.5"><div class="hd"><h3 class="sec"><span>5.5 Foods to Avoid</span></h3></div><div class="imgwrap" data-key="5.5">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/22_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 22">
+</div>
+</div><div class="text"><p>Some foods and substances can seriously harm cats.</p>
+<p>Never intentionally feed your cat:</p>
+<ul><li>Chocolate.</li><li>Onions.</li><li>Garlic.</li><li>Grapes or raisins.</li><li>Alcohol.</li><li>Caffeinated drinks.</li><li>Raw yeast dough.</li><li>Foods containing the artificial sweetener xylitol.</li><li>Cooked bones that can splinter.</li></ul>
+<p>Avoid raw meat and raw eggs because of infection risks.</p>
+<p>Milk is also unnecessary for most adult cats. Many cats cannot digest lactose properly.</p>
+<p>Do not assume that food is safe simply because humans can eat it.</p></div><footer><span>Chapter 5  ·  Feeding and Nutrition</span><span class="num">27</span></footer></section>
+<section class="sheet pg" id="p-5.6"><div class="hd"><h3 class="sec"><span>5.6 Keep Fresh Water Available</span></h3></div><div class="imgwrap" data-key="5.6">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/23_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 23">
+</div>
+</div><div class="text"><p>Your cat should always have access to clean drinking water.</p>
+<p>Wash the water bowl and refill it daily.</p>
+<p>Some cats prefer wide, shallow bowls or water fountains.</p>
+<p>If your cat suddenly starts drinking significantly more or less than usual, speak to a veterinarian.</p>
+<p class="callout"><strong>Important:</strong> Never attempt to create a homemade long-term cat diet without professional nutritional guidance. An unbalanced diet can cause serious nutritional deficiencies.</p></div><footer><span>Chapter 5  ·  Feeding and Nutrition</span><span class="num">28</span></footer></section>
+<section class="sheet opener" id="chapter6" data-nav="Chapter 6: Litter Training and Toilet Habits"><div class="hd"><p class="label">CHAPTER 6</p><h2 class="chtitle">Litter Training and Toilet Habits</h2></div><div class="imgwrap" data-key="chapter6">
+<div class="imgbox r169" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/24_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 24">
+</div>
+</div><div class="text"><p>One of the most useful things you can teach your new cat is how to use its litter box.</p>
+<p>The good news is that many cats naturally prefer to bury their waste.</p>
+<p>However, the right setup is important.</p></div><footer><span>Chapter 6  ·  Litter Training and Toilet Habits</span><span class="num">29</span></footer></section>
+<section class="sheet pg" id="p-6.1"><div class="hd"><h3 class="sec"><span>6.1 Choosing a Litter Box</span></h3></div><div class="imgwrap" data-key="6.1">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/25_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 25">
+</div>
+</div><div class="text"><p>Choose a box that is large enough for your cat to enter, turn around and dig comfortably.</p>
+<p>For kittens and older cats, a lower entrance may make access easier.</p>
+<p>Some cats prefer open boxes rather than covered ones.</p>
+<p>If you are unsure, start with a simple open litter box.</p></div><footer><span>Chapter 6  ·  Litter Training and Toilet Habits</span><span class="num">30</span></footer></section>
+<section class="sheet pg" id="p-6.2"><div class="hd"><h3 class="sec"><span>6.2 Where Should You Put It?</span></h3></div><div class="imgwrap" data-key="6.2">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/26_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 26">
+</div>
+</div><div class="text"><p>Place the litter box somewhere quiet and accessible.</p>
+<p>Avoid placing it:</p>
+<ul><li>Beside loud appliances.</li><li>Next to food and water.</li><li>In an area with constant foot traffic.</li><li>Somewhere the cat can easily become trapped.</li></ul>
+<p>In a multi-level home, provide convenient access to litter boxes on different floors.</p>
+<p>A useful general rule is one litter box per cat, plus one extra.</p></div><footer><span>Chapter 6  ·  Litter Training and Toilet Habits</span><span class="num">31</span></footer></section>
+<section class="sheet pg" id="p-6.3"><div class="hd"><h3 class="sec"><span>6.3 Teaching Your Cat to Use It</span></h3></div><div class="imgwrap" data-key="6.3">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/27_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 27">
+</div>
+</div><div class="text"><p>When your cat arrives:</p>
+<ol><li>Show it where the litter box is.</li><li>Allow it to investigate.</li><li>Give it privacy.</li><li>Keep the box accessible.</li><li>Reward calm, positive behaviour.</li></ol>
+<p>For a kitten, gently placing it near the litter box after meals or naps can help it learn the location.</p>
+<p>Never punish a cat for having an accident.</p></div><footer><span>Chapter 6  ·  Litter Training and Toilet Habits</span><span class="num">32</span></footer></section>
+<section class="sheet pg" id="p-6.4"><div class="hd"><h3 class="sec"><span>6.4 Keeping the Litter Box Clean</span></h3></div><div class="imgwrap" data-key="6.4">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/28_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 28">
+</div>
+</div><div class="text"><p>Cats are generally clean animals and may avoid a dirty litter box.</p>
+<p>A simple cleaning routine:</p>
+<ul><li>Remove waste at least once daily.</li><li>Replace litter as needed.</li><li>Wash the box regularly.</li><li>Use mild, pet-safe cleaning products.</li><li>Avoid strong fragrances.</li></ul></div><footer><span>Chapter 6  ·  Litter Training and Toilet Habits</span><span class="num">33</span></footer></section>
+<section class="sheet pg" id="p-6.5"><div class="hd"><h3 class="sec"><span>6.5 What If Your Cat Stops Using the Litter Box?</span></h3></div><div class="imgwrap" data-key="6.5">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/29_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 29">
+</div>
+</div><div class="text"><p>Do not immediately assume your cat is being difficult.</p>
+<p>Possible reasons include:</p>
+<ul><li>A dirty litter box.</li><li>An inconvenient location.</li><li>A change in litter type.</li><li>Stress or fear.</li><li>Conflict with another animal.</li><li>Urinary or digestive problems.</li></ul>
+<p>A cat that repeatedly strains to urinate, cries while attempting to urinate or produces little or no urine needs urgent veterinary assessment. A urinary blockage can be life-threatening, especially in male cats.</p>
+<p>Never ignore this situation.</p></div><footer><span>Chapter 6  ·  Litter Training and Toilet Habits</span><span class="num">34</span></footer></section>
+<section class="sheet opener" id="chapter7" data-nav="Chapter 7: Grooming and Hygiene"><div class="hd"><p class="label">CHAPTER 7</p><h2 class="chtitle">Grooming and Hygiene</h2></div><div class="imgwrap" data-key="chapter7">
+<div class="imgbox r169" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/30_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 30">
+</div>
+</div><div class="text"><p>Keeping your cat clean is part of maintaining its health.</p>
+<p>Fortunately, cats spend a lot of time grooming themselves.</p>
+<p>However, they still need help with certain hygiene tasks.</p></div><footer><span>Chapter 7  ·  Grooming and Hygiene</span><span class="num">35</span></footer></section>
+<section class="sheet pg" id="p-7.1"><div class="hd"><h3 class="sec"><span>7.1 Brushing Your Cat</span></h3></div><div class="imgwrap" data-key="7.1">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/31_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 31">
+</div>
+</div><div class="text"><p>Regular brushing helps remove loose hair, reduce tangles and keep the coat in good condition.</p>
+<p>Short-haired cats may need less frequent brushing than long-haired cats.</p>
+<p>Start gently and use a suitable brush.</p>
+<p>If your cat dislikes brushing, try short sessions and reward calm behaviour.</p></div><footer><span>Chapter 7  ·  Grooming and Hygiene</span><span class="num">36</span></footer></section>
+<section class="sheet pg" id="p-7.2"><div class="hd"><h3 class="sec"><span>7.2 Bathing</span></h3></div><div class="imgwrap" data-key="7.2">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/32_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 32">
+</div>
+</div><div class="text"><p>Most healthy cats do not require frequent baths.</p>
+<p>They generally clean themselves.</p>
+<p>Bathing may be necessary when a cat becomes unusually dirty or has a substance on its fur that cannot be safely removed by ordinary grooming.</p>
+<p>Use a cat-safe shampoo when bathing is appropriate.</p>
+<p>Never use human shampoo or household cleaning products.</p>
+<p>If the substance on the fur could be toxic, contact a veterinarian before attempting to clean it yourself.</p></div><footer><span>Chapter 7  ·  Grooming and Hygiene</span><span class="num">37</span></footer></section>
+<section class="sheet pg" id="p-7.3"><div class="hd"><h3 class="sec"><span>7.3 Nail Care</span></h3></div><div class="imgwrap" data-key="7.3">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/33_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 33">
+</div>
+</div><div class="text"><p>A cat's claws grow continuously.</p>
+<p>Provide scratching posts and surfaces so your cat can scratch naturally.</p>
+<p>Some cats also need occasional nail trimming.</p>
+<p>If you trim the nails yourself:</p>
+<ul><li>Use proper pet nail clippers.</li><li>Trim only the sharp tip.</li><li>Avoid the pink area inside the claw, known as the quick.</li><li>Stop if your cat becomes distressed.</li></ul>
+<p>Ask a veterinarian or trained groomer to demonstrate the process if you are unsure.</p>
+<p>Never declaw your cat as a routine solution to scratching furniture. Provide appropriate scratching alternatives instead.</p></div><footer><span>Chapter 7  ·  Grooming and Hygiene</span><span class="num">38</span></footer></section>
+<section class="sheet pg" id="p-7.4"><div class="hd"><h3 class="sec"><span>7.4 Ear and Eye Care</span></h3></div><div class="imgwrap" data-key="7.4">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/34_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 34">
+</div>
+</div><div class="text"><p>Check your cat's eyes and ears regularly.</p>
+<p>Look for unusual discharge, redness, swelling or unpleasant smells.</p>
+<p>Do not insert cotton buds or other objects deep into the ears.</p>
+<p>Persistent discharge, squinting or eye pain requires veterinary attention.</p></div><footer><span>Chapter 7  ·  Grooming and Hygiene</span><span class="num">39</span></footer></section>
+<section class="sheet pg" id="p-7.5"><div class="hd"><h3 class="sec"><span>7.5 Dental Care</span></h3></div><div class="imgwrap" data-key="7.5">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/35_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 35">
+</div>
+</div><div class="text"><p>Dental health is often overlooked by new cat owners.</p>
+<p>Plaque and dental disease can cause discomfort and affect eating.</p>
+<p>Where possible, introduce tooth brushing gradually using a cat-specific toothbrush and toothpaste.</p>
+<p>Never use human toothpaste on your cat.</p>
+<p>Ask your veterinarian to examine your cat's teeth during routine check-ups.</p></div><footer><span>Chapter 7  ·  Grooming and Hygiene</span><span class="num">40</span></footer></section>
+<section class="sheet opener" id="chapter8" data-nav="Chapter 8: Understanding Cat Behaviour"><div class="hd"><p class="label">CHAPTER 8</p><h2 class="chtitle">Understanding Cat Behaviour</h2></div><div class="imgwrap" data-key="chapter8">
+<div class="imgbox r169" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/36_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 36">
+</div>
+</div><div class="text"><p>Understanding your cat's behaviour will help you build a better relationship.</p>
+<p>Many behaviours that seem strange to humans are completely natural for cats.</p></div><footer><span>Chapter 8  ·  Understanding Cat Behaviour</span><span class="num">41</span></footer></section>
+<section class="sheet pg" id="p-8.1"><div class="hd"><h3 class="sec"><span>8.1 Why Does My Cat Scratch Furniture?</span></h3></div><div class="imgwrap" data-key="8.1">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/37_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 37">
+</div>
+</div><div class="text"><p>Scratching is a natural behaviour.</p>
+<p>Cats scratch to:</p>
+<ul><li>Remove old outer claw layers.</li><li>Stretch their muscles.</li><li>Mark their territory.</li><li>Leave scent signals.</li></ul>
+<p>Instead of punishing your cat, provide scratching posts or boards.</p>
+<p>Place them near areas where your cat already likes to scratch.</p>
+<p>Reward your cat when it uses the appropriate surface.</p></div><footer><span>Chapter 8  ·  Understanding Cat Behaviour</span><span class="num">42</span></footer></section>
+<section class="sheet pg" id="p-8.2"><div class="hd"><h3 class="sec"><span>8.2 Why Does My Cat Bite Me?</span></h3></div><div class="imgwrap" data-key="8.2">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/38_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 38">
+</div>
+</div><div class="text"><p>There are several possible reasons.</p>
+<p><strong>Play biting:</strong> Young cats often use their mouths during play.</p>
+<p><strong>Overstimulation:</strong> Some cats become uncomfortable after too much petting.</p>
+<p><strong>Fear:</strong> A frightened cat may bite to defend itself.</p>
+<p><strong>Pain:</strong> A cat that suddenly becomes aggressive when touched may be experiencing discomfort.</p>
+<p>Avoid using your hands as toys.</p>
+<p>Use toys that create a safe distance between your hands and your cat's teeth.</p>
+<p>If biting behaviour starts suddenly or becomes severe, consult a veterinarian.</p></div><footer><span>Chapter 8  ·  Understanding Cat Behaviour</span><span class="num">43</span></footer></section>
+<section class="sheet pg" id="p-8.3"><div class="hd"><h3 class="sec"><span>8.3 Why Does My Cat Knead Blankets?</span></h3></div><div class="imgwrap" data-key="8.3">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/39_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 39">
+</div>
+</div><div class="text"><p>Kneading happens when a cat pushes its paws alternately against a soft surface.</p>
+<p>Kittens knead while nursing, and many adult cats continue doing it.</p>
+<p>It is commonly associated with comfort and relaxation.</p>
+<p>Allow your cat to knead a blanket if it enjoys doing so.</p></div><footer><span>Chapter 8  ·  Understanding Cat Behaviour</span><span class="num">44</span></footer></section>
+<section class="sheet pg" id="p-8.4"><div class="hd"><h3 class="sec"><span>8.4 Why Does My Cat Bring Me Dead Animals?</span></h3></div><div class="imgwrap" data-key="8.4">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/40_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 40">
+</div>
+</div><div class="text"><p>Cats have natural hunting instincts.</p>
+<p>Even well-fed cats may chase insects, birds or small animals.</p>
+<p>This behaviour is not necessarily a sign that your cat is hungry.</p>
+<p>Keep your cat safely entertained with interactive toys and supervised play.</p></div><footer><span>Chapter 8  ·  Understanding Cat Behaviour</span><span class="num">45</span></footer></section>
+<section class="sheet pg" id="p-8.5"><div class="hd"><h3 class="sec"><span>8.5 Why Does My Cat Meow So Much?</span></h3></div><div class="imgwrap" data-key="8.5">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/41_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 41">
+</div>
+</div><div class="text"><p>Cats use vocal sounds to communicate with humans and other animals.</p>
+<p>Your cat may meow because it wants:</p>
+<ul><li>Food.</li><li>Attention.</li><li>Playtime.</li><li>Access to another room.</li><li>Help or reassurance.</li></ul>
+<p>A sudden change in vocalisation, particularly in an older cat, should be discussed with a veterinarian.</p></div><footer><span>Chapter 8  ·  Understanding Cat Behaviour</span><span class="num">46</span></footer></section>
+<section class="sheet pg" id="p-8.6"><div class="hd"><h3 class="sec"><span>8.6 Never Use Physical Punishment</span></h3></div><div class="imgwrap" data-key="8.6">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/42_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 42">
+</div>
+</div><div class="text"><p>Hitting, shouting or frightening a cat does not teach it good behaviour.</p>
+<p>It can damage trust and increase fear or aggression.</p>
+<p>Instead, identify why the behaviour is happening and provide an appropriate alternative.</p></div><footer><span>Chapter 8  ·  Understanding Cat Behaviour</span><span class="num">47</span></footer></section>
+<section class="sheet opener" id="chapter9" data-nav="Chapter 9: Health, Vaccinations and Veterinary Care"><div class="hd"><p class="label">CHAPTER 9</p><h2 class="chtitle">Health, Vaccinations and Veterinary Care</h2></div><div class="imgwrap" data-key="chapter9">
+<div class="imgbox r169" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/43_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 43">
+</div>
+</div><div class="text"><p>Your cat cannot tell you when something is wrong.</p>
+<p>That is why regular observation and veterinary care are essential.</p></div><footer><span>Chapter 9  ·  Health, Vaccinations and Veterinary Care</span><span class="num">48</span></footer></section>
+<section class="sheet pg" id="p-9.1"><div class="hd"><h3 class="sec"><span>9.1 Routine Veterinary Visits</span></h3></div><div class="imgwrap" data-key="9.1">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/44_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 44">
+</div>
+</div><div class="text"><p>Arrange regular health examinations with a qualified veterinarian.</p>
+<p>A new cat should receive an initial examination, even if it appears healthy.</p>
+<p>Your veterinarian can advise on:</p>
+<ul><li>Vaccinations.</li><li>Parasite prevention.</li><li>Weight management.</li><li>Dental health.</li><li>Diet.</li><li>Reproductive health.</li><li>Age-related health concerns.</li></ul>
+<p>Healthy adult cats commonly need at least annual examinations, although senior cats and cats with medical conditions may need more frequent visits.</p></div><footer><span>Chapter 9  ·  Health, Vaccinations and Veterinary Care</span><span class="num">49</span></footer></section>
+<section class="sheet pg" id="p-9.2"><div class="hd"><h3 class="sec"><span>9.2 Vaccinations</span></h3></div><div class="imgwrap" data-key="9.2">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/45_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 45">
+</div>
+</div><div class="text"><p>Vaccines help protect cats against serious infectious diseases.</p>
+<p>Common feline vaccines include those protecting against:</p>
+<ul><li>Feline panleukopenia.</li><li>Feline herpesvirus.</li><li>Feline calicivirus.</li><li>Rabies, where recommended or required.</li></ul>
+<p>Other vaccines may be appropriate depending on your cat's age, health, lifestyle and exposure risk.</p>
+<p>Kittens generally require a series of vaccinations rather than just one injection.</p>
+<p>The exact schedule varies, so follow your veterinarian's instructions and maintain vaccination records.</p>
+<p>Do not assume a cat is fully vaccinated simply because a previous owner says it received an injection.</p></div><footer><span>Chapter 9  ·  Health, Vaccinations and Veterinary Care</span><span class="num">50</span></footer></section>
+<section class="sheet pg" id="p-9.3"><div class="hd"><h3 class="sec"><span>9.3 Parasite Prevention</span></h3></div><div class="imgwrap" data-key="9.3">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/46_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 46">
+</div>
+</div><div class="text"><p>Cats can be affected by parasites such as:</p>
+<ul><li>Fleas.</li><li>Ticks.</li><li>Ear mites.</li><li>Intestinal worms.</li></ul>
+<p>Some parasites can cause itching, skin irritation, digestive problems and other health complications.</p>
+<p>Ask your veterinarian which parasite prevention products are suitable.</p>
+<p>Never use a dog flea treatment on a cat unless a veterinarian has specifically confirmed that the product is safe. Some dog products contain ingredients that are highly toxic to cats.</p></div><footer><span>Chapter 9  ·  Health, Vaccinations and Veterinary Care</span><span class="num">51</span></footer></section>
+<section class="sheet pg" id="p-9.4"><div class="hd"><h3 class="sec"><span>9.4 Signs Your Cat May Be Sick</span></h3></div><div class="imgwrap" data-key="9.4">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/47_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 47">
+</div>
+</div><div class="text"><p>Watch for changes such as:</p>
+<ul><li>Refusing food.</li><li>Repeated vomiting.</li><li>Persistent diarrhoea.</li><li>Unusual tiredness.</li><li>Weight loss.</li><li>Excessive thirst.</li><li>Difficulty breathing.</li><li>Persistent coughing or sneezing.</li><li>Changes in urination.</li><li>Unusual hiding or aggression.</li><li>Problems walking.</li></ul>
+<p>A single mild symptom may have several possible explanations, but persistent or worsening symptoms need veterinary assessment.</p></div><footer><span>Chapter 9  ·  Health, Vaccinations and Veterinary Care</span><span class="num">52</span></footer></section>
+<section class="sheet pg" id="p-9.5"><div class="hd"><h3 class="sec"><span>9.5 Emergency Warning Signs</span></h3></div><div class="imgwrap" data-key="9.5">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/48_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 48">
+</div>
+</div><div class="text"><p>Seek urgent veterinary help if your cat:</p>
+<ul><li>Struggles to breathe.</li><li>Cannot urinate or repeatedly strains without producing urine.</li><li>Collapses or becomes unresponsive.</li><li>Has a seizure.</li><li>Suffers major bleeding or serious injury.</li><li>May have swallowed poison.</li><li>Has severe or sudden weakness.</li></ul>
+<p>Do not wait to see whether a serious emergency resolves by itself.</p></div><footer><span>Chapter 9  ·  Health, Vaccinations and Veterinary Care</span><span class="num">53</span></footer></section>
+<section class="sheet pg" id="p-9.6"><div class="hd"><h3 class="sec"><span>9.6 Spaying and Neutering</span></h3></div><div class="imgwrap" data-key="9.6">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/49_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 49">
+</div>
+</div><div class="text"><p>Spaying and neutering are surgical procedures that prevent reproduction.</p>
+<p>They can also reduce certain reproductive behaviours and prevent some reproductive health problems.</p>
+<p>Discuss the appropriate timing, benefits and risks with your veterinarian.</p></div><footer><span>Chapter 9  ·  Health, Vaccinations and Veterinary Care</span><span class="num">54</span></footer></section>
+<section class="sheet opener" id="chapter10" data-nav="Chapter 10: Raising Kittens"><div class="hd"><p class="label">CHAPTER 10</p><h2 class="chtitle">Raising Kittens</h2></div><div class="imgwrap" data-key="chapter10">
+<div class="imgbox r169" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/50_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 50">
+</div>
+</div><div class="text"><p>Kittens are adorable, energetic and curious.</p>
+<p>They also require extra care because their bodies and behaviour are still developing.</p></div><footer><span>Chapter 10  ·  Raising Kittens</span><span class="num">55</span></footer></section>
+<section class="sheet pg" id="p-10.1"><div class="hd"><h3 class="sec"><span>10.1 Feeding a Growing Kitten</span></h3></div><div class="imgwrap" data-key="10.1">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/51_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 51">
+</div>
+</div><div class="text"><p>Kittens need food specifically formulated for growth.</p>
+<p>They require sufficient calories, protein, vitamins and minerals.</p>
+<p>Feed according to age, body condition and veterinary guidance.</p>
+<p>Very young kittens that have lost their mother may need specialist care and kitten milk replacer.</p>
+<p>Never use ordinary cow's milk as a substitute.</p></div><footer><span>Chapter 10  ·  Raising Kittens</span><span class="num">56</span></footer></section>
+<section class="sheet pg" id="p-10.2"><div class="hd"><h3 class="sec"><span>10.2 Socialisation</span></h3></div><div class="imgwrap" data-key="10.2">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/52_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 52">
+</div>
+</div><div class="text"><p>Early positive experiences help kittens become more comfortable with people and their surroundings.</p>
+<p>Introduce them gradually to:</p>
+<ul><li>Gentle handling.</li><li>Everyday household sounds.</li><li>Different surfaces.</li><li>Appropriate toys.</li><li>Grooming.</li><li>Their carrier.</li><li>Friendly visitors.</li></ul>
+<p>Do not overwhelm a kitten with too many new experiences at once.</p></div><footer><span>Chapter 10  ·  Raising Kittens</span><span class="num">57</span></footer></section>
+<section class="sheet pg" id="p-10.3"><div class="hd"><h3 class="sec"><span>10.3 Play and Exercise</span></h3></div><div class="imgwrap" data-key="10.3">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/53_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 53">
+</div>
+</div><div class="text"><p>Kittens have lots of energy.</p>
+<p>Provide toys that encourage chasing, jumping and exploring.</p>
+<p>Use supervised play sessions throughout the day.</p>
+<p>Avoid toys with loose strings, ribbons or small parts that could be swallowed.</p>
+<p>Never leave a kitten unsupervised with potentially dangerous toys.</p></div><footer><span>Chapter 10  ·  Raising Kittens</span><span class="num">58</span></footer></section>
+<section class="sheet pg" id="p-10.4"><div class="hd"><h3 class="sec"><span>10.4 Sleeping</span></h3></div><div class="imgwrap" data-key="10.4">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/54_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 54">
+</div>
+</div><div class="text"><p>Kittens need plenty of rest.</p>
+<p>Provide a warm, quiet and comfortable sleeping area.</p>
+<p>Do not repeatedly wake a kitten to play.</p></div><footer><span>Chapter 10  ·  Raising Kittens</span><span class="num">59</span></footer></section>
+<section class="sheet pg" id="p-10.5"><div class="hd"><h3 class="sec"><span>10.5 Veterinary Care for Kittens</span></h3></div><div class="imgwrap" data-key="10.5">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/55_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 55">
+</div>
+</div><div class="text"><p>Young kittens need a planned programme of veterinary examinations, vaccinations and parasite prevention.</p>
+<p>Ask about:</p>
+<ul><li>Initial health examination.</li><li>Vaccine schedule.</li><li>Deworming.</li><li>Flea prevention.</li><li>Nutrition.</li><li>Identification.</li><li>Spaying or neutering.</li></ul>
+<p>Keep all medical records in one place.</p></div><footer><span>Chapter 10  ·  Raising Kittens</span><span class="num">60</span></footer></section>
+<section class="sheet opener" id="chapter11" data-nav="Chapter 11: Keeping Indoor Cats Happy and Safe"><div class="hd"><p class="label">CHAPTER 11</p><h2 class="chtitle">Keeping Indoor Cats Happy and Safe</h2></div><div class="imgwrap" data-key="chapter11">
+<div class="imgbox r169" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/56_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 56">
+</div>
+</div><div class="text"><p>An indoor cat can live a comfortable and stimulating life, but its environment needs to provide opportunities for natural behaviour.</p>
+<p>Simply leaving food and water in a room is not enough.</p></div><footer><span>Chapter 11  ·  Keeping Indoor Cats Happy and Safe</span><span class="num">61</span></footer></section>
+<section class="sheet pg" id="p-11.1"><div class="hd"><h3 class="sec"><span>11.1 Provide Daily Playtime</span></h3></div><div class="imgwrap" data-key="11.1">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/57_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 57">
+</div>
+</div><div class="text"><p>Play allows cats to practise their natural hunting behaviours.</p>
+<p>Use toys that encourage your cat to stalk, chase and pounce.</p>
+<p>Examples include:</p>
+<ul><li>Wand toys.</li><li>Lightweight balls.</li><li>Puzzle feeders.</li><li>Cat tunnels.</li><li>Interactive toys.</li></ul>
+<p>Allow your cat to catch the toy occasionally so that play feels rewarding.</p></div><footer><span>Chapter 11  ·  Keeping Indoor Cats Happy and Safe</span><span class="num">62</span></footer></section>
+<section class="sheet pg" id="p-11.2"><div class="hd"><h3 class="sec"><span>11.2 Give Your Cat Places to Climb</span></h3></div><div class="imgwrap" data-key="11.2">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/58_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 58">
+</div>
+</div><div class="text"><p>Cats often enjoy elevated spaces where they can observe their surroundings.</p>
+<p>Consider:</p>
+<ul><li>Cat trees.</li><li>Stable shelves.</li><li>Window perches.</li><li>Safe climbing furniture.</li></ul>
+<p>Make sure climbing areas are secure and cannot fall over.</p></div><footer><span>Chapter 11  ·  Keeping Indoor Cats Happy and Safe</span><span class="num">63</span></footer></section>
+<section class="sheet pg" id="p-11.3"><div class="hd"><h3 class="sec"><span>11.3 Prevent Boredom</span></h3></div><div class="imgwrap" data-key="11.3">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/59_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 59">
+</div>
+</div><div class="text"><p>A bored cat may become destructive, restless or overweight.</p>
+<p>Rotate toys rather than leaving every toy available all the time.</p>
+<p>Use puzzle feeders or hide small portions of food around safe areas to encourage exploration.</p></div><footer><span>Chapter 11  ·  Keeping Indoor Cats Happy and Safe</span><span class="num">64</span></footer></section>
+<section class="sheet pg" id="p-11.4"><div class="hd"><h3 class="sec"><span>11.4 Indoor or Outdoor Living?</span></h3></div><div class="imgwrap" data-key="11.4">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/60_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 60">
+</div>
+</div><div class="text"><p>Outdoor environments expose cats to risks such as:</p>
+<ul><li>Traffic.</li><li>Other animals.</li><li>Infectious diseases.</li><li>Parasites.</li><li>Poisonous substances.</li><li>Getting lost.</li></ul>
+<p>Indoor living with appropriate enrichment can reduce many of these risks.</p>
+<p>If you want your cat to experience the outdoors, discuss safe options such as supervised harness walks or secure outdoor enclosures.</p>
+<p>Never assume an outdoor cat will automatically know how to avoid danger.</p></div><footer><span>Chapter 11  ·  Keeping Indoor Cats Happy and Safe</span><span class="num">65</span></footer></section>
+<section class="sheet pg" id="p-11.5"><div class="hd"><h3 class="sec"><span>11.5 Keep Your Cat Identifiable</span></h3></div><div class="imgwrap" data-key="11.5">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/61_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 61">
+</div>
+</div><div class="text"><p>Consider microchipping your cat and keeping its identification details updated.</p>
+<p>A properly fitted breakaway collar with an identification tag can provide another layer of protection.</p></div><footer><span>Chapter 11  ·  Keeping Indoor Cats Happy and Safe</span><span class="num">66</span></footer></section>
+<section class="sheet opener" id="chapter12" data-nav="Chapter 12: Common Mistakes Every New Cat Owner Should Avoid"><div class="hd"><p class="label">CHAPTER 12</p><h2 class="chtitle">Common Mistakes Every New Cat Owner Should Avoid</h2></div><div class="imgwrap" data-key="chapter12">
+<div class="imgbox r169" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/62_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 62">
+</div>
+</div><div class="text"><p>Even people with good intentions can make mistakes when caring for their first cat.</p>
+<p>Here are some common ones to avoid.</p></div><footer><span>Chapter 12  ·  Common Mistakes Every New Cat Owner Should Avoid</span><span class="num">67</span></footer></section>
+<section class="sheet pg" id="p-m1"><div class="hd"><h3 class="sec"><span>Mistake 1: Feeding Too Much</span></h3></div><div class="imgwrap" data-key="m1">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/63_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 63">
+</div>
+</div><div class="text"><p>Giving your cat unlimited food without monitoring its weight can contribute to obesity.</p>
+<p>Measure portions and monitor body condition.</p></div><footer><span>Chapter 12  ·  Common Mistakes Every New Cat Owner Should Avoid</span><span class="num">68</span></footer></section>
+<section class="sheet pg" id="p-m2"><div class="hd"><h3 class="sec"><span>Mistake 2: Giving Cow's Milk</span></h3></div><div class="imgwrap" data-key="m2">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/64_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 64">
+</div>
+</div><div class="text"><p>Many cats cannot digest lactose properly.</p>
+<p>Provide fresh water instead.</p></div><footer><span>Chapter 12  ·  Common Mistakes Every New Cat Owner Should Avoid</span><span class="num">69</span></footer></section>
+<section class="sheet pg" id="p-m3"><div class="hd"><h3 class="sec"><span>Mistake 3: Ignoring Veterinary Visits</span></h3></div><div class="imgwrap" data-key="m3">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/65_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 65">
+</div>
+</div><div class="text"><p>A cat can appear healthy while having an underlying medical problem.</p>
+<p>Regular veterinary examinations are important.</p></div><footer><span>Chapter 12  ·  Common Mistakes Every New Cat Owner Should Avoid</span><span class="num">70</span></footer></section>
+<section class="sheet pg" id="p-m4"><div class="hd"><h3 class="sec"><span>Mistake 4: Punishing Natural Behaviour</span></h3></div><div class="imgwrap" data-key="m4">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/66_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 66">
+</div>
+</div><div class="text"><p>Scratching, climbing and hunting are natural cat behaviours.</p>
+<p>Provide appropriate outlets rather than using punishment.</p></div><footer><span>Chapter 12  ·  Common Mistakes Every New Cat Owner Should Avoid</span><span class="num">71</span></footer></section>
+<section class="sheet pg" id="p-m5"><div class="hd"><h3 class="sec"><span>Mistake 5: Changing Food Suddenly</span></h3></div><div class="imgwrap" data-key="m5">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/67_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 67">
+</div>
+</div><div class="text"><p>Sudden diet changes may cause digestive upset.</p>
+<p>When changing food, gradually introduce the new food over several days, unless your veterinarian advises otherwise.</p></div><footer><span>Chapter 12  ·  Common Mistakes Every New Cat Owner Should Avoid</span><span class="num">72</span></footer></section>
+<section class="sheet pg" id="p-m6"><div class="hd"><h3 class="sec"><span>Mistake 6: Leaving Dangerous Objects Around</span></h3></div><div class="imgwrap" data-key="m6">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/68_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 68">
+</div>
+</div><div class="text"><p>Small objects, electrical cables, chemicals and toxic plants can put your cat at risk.</p>
+<p>Make home safety part of your regular routine.</p></div><footer><span>Chapter 12  ·  Common Mistakes Every New Cat Owner Should Avoid</span><span class="num">73</span></footer></section>
+<section class="sheet pg" id="p-m7"><div class="hd"><h3 class="sec"><span>Mistake 7: Ignoring Changes in Behaviour</span></h3></div><div class="imgwrap" data-key="m7">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/69_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 69">
+</div>
+</div><div class="text"><p>A cat that suddenly hides, stops eating or becomes unusually aggressive may be experiencing stress or illness.</p>
+<p>Pay attention to changes and seek veterinary advice when needed.</p></div><footer><span>Chapter 12  ·  Common Mistakes Every New Cat Owner Should Avoid</span><span class="num">74</span></footer></section>
+<section class="sheet pg" id="p-m8"><div class="hd"><h3 class="sec"><span>Mistake 8: Forcing Affection</span></h3></div><div class="imgwrap" data-key="m8">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/70_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 70">
+</div>
+</div><div class="text"><p>Not every cat enjoys being carried or hugged.</p>
+<p>Respect your cat's boundaries and allow trust to develop naturally.</p></div><footer><span>Chapter 12  ·  Common Mistakes Every New Cat Owner Should Avoid</span><span class="num">75</span></footer></section>
+<section class="sheet pg" id="p-m9"><div class="hd"><h3 class="sec"><span>Mistake 9: Leaving a Cat Without a Care Plan</span></h3></div><div class="imgwrap" data-key="m9">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/71_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 71">
+</div>
+</div><div class="text"><p>Cats need daily food, fresh water, clean litter and attention.</p>
+<p>Arrange a responsible caregiver whenever you travel.</p></div><footer><span>Chapter 12  ·  Common Mistakes Every New Cat Owner Should Avoid</span><span class="num">76</span></footer></section>
+<section class="sheet pg" id="p-m10"><div class="hd"><h3 class="sec"><span>Mistake 10: Treating Internet Advice as a Diagnosis</span></h3></div><div class="imgwrap" data-key="m10">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/72_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 72">
+</div>
+</div><div class="text"><p>Online information can help you learn, but it cannot replace a physical examination by a veterinarian.</p>
+<p>When in doubt, seek professional help.</p></div><footer><span>Chapter 12  ·  Common Mistakes Every New Cat Owner Should Avoid</span><span class="num">77</span></footer></section>
+<section class="sheet opener" id="bonus1" data-nav="Bonus 1: The First-Time Cat Owner Checklist"><div class="hd"><p class="label">BONUS 1</p><h2 class="chtitle">The First-Time Cat Owner Checklist</h2></div><div class="imgwrap" data-key="bonus1">
+<div class="imgbox r169" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/73_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 73">
+</div>
+</div><div class="text"><p>Use this checklist before bringing your cat home.</p></div><footer><span>Bonus 1  ·  The First-Time Cat Owner Checklist</span><span class="num">78</span></footer></section>
+<section class="sheet pg" id="p-b1-supplies"><div class="hd"><h3 class="sec"><span>Essential Supplies</span></h3></div><div class="imgwrap" data-key="b1-supplies">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/74_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 74">
+</div>
+</div><div class="text"><ul class="check"><li><label><input type="checkbox"><span>Appropriate cat food.</span></label></li><li><label><input type="checkbox"><span>Food bowl.</span></label></li><li><label><input type="checkbox"><span>Water bowl.</span></label></li><li><label><input type="checkbox"><span>Litter box.</span></label></li><li><label><input type="checkbox"><span>Cat litter.</span></label></li><li><label><input type="checkbox"><span>Scratching post.</span></label></li><li><label><input type="checkbox"><span>Secure cat carrier.</span></label></li><li><label><input type="checkbox"><span>Comfortable sleeping area.</span></label></li><li><label><input type="checkbox"><span>Appropriate toys.</span></label></li><li><label><input type="checkbox"><span>Grooming brush.</span></label></li></ul></div><footer><span>Bonus 1  ·  The First-Time Cat Owner Checklist</span><span class="num">79</span></footer></section>
+<section class="sheet pg" id="p-b1-home"><div class="hd"><h3 class="sec"><span>Home Preparation</span></h3></div><div class="imgwrap" data-key="b1-home">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/75_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 75">
+</div>
+</div><div class="text"><ul class="check"><li><label><input type="checkbox"><span>Secure electrical cables.</span></label></li><li><label><input type="checkbox"><span>Remove toxic plants.</span></label></li><li><label><input type="checkbox"><span>Store chemicals safely.</span></label></li><li><label><input type="checkbox"><span>Secure windows and balconies.</span></label></li><li><label><input type="checkbox"><span>Remove small objects that could be swallowed.</span></label></li><li><label><input type="checkbox"><span>Prepare a quiet room.</span></label></li><li><label><input type="checkbox"><span>Choose a suitable litter box location.</span></label></li></ul></div><footer><span>Bonus 1  ·  The First-Time Cat Owner Checklist</span><span class="num">80</span></footer></section>
+<section class="sheet pg" id="p-b1-health"><div class="hd"><h3 class="sec"><span>Health Preparation</span></h3></div><div class="imgwrap" data-key="b1-health">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/76_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 76">
+</div>
+</div><div class="text"><ul class="check"><li><label><input type="checkbox"><span>Find a qualified veterinarian.</span></label></li><li><label><input type="checkbox"><span>Arrange an initial examination.</span></label></li><li><label><input type="checkbox"><span>Obtain available vaccination records.</span></label></li><li><label><input type="checkbox"><span>Discuss parasite prevention.</span></label></li><li><label><input type="checkbox"><span>Ask about spaying or neutering.</span></label></li><li><label><input type="checkbox"><span>Save an emergency veterinary contact.</span></label></li></ul></div><footer><span>Bonus 1  ·  The First-Time Cat Owner Checklist</span><span class="num">81</span></footer></section>
+<section class="sheet opener" id="bonus2" data-nav="Bonus 2: A Simple Daily Cat Care Routine"><div class="hd"><p class="label">BONUS 2</p><h2 class="chtitle">A Simple Daily Cat Care Routine</h2></div><div class="imgwrap" data-key="bonus2">
+<div class="imgbox r169" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/77_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 77">
+</div>
+</div><div class="text"><p>You do not need an overly complicated schedule to care for your cat.</p>
+<p>Consistency is what matters.</p></div><footer><span>Bonus 2  ·  A Simple Daily Cat Care Routine</span><span class="num">82</span></footer></section>
+<section class="sheet pg" id="p-b2-morning"><div class="hd"><h3 class="sec"><span>Morning</span></h3></div><div class="imgwrap" data-key="b2-morning">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/78_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 78">
+</div>
+</div><div class="text"><ul><li>Provide fresh food according to the feeding plan.</li><li>Refresh the water bowl.</li><li>Scoop the litter box.</li><li>Check that your cat appears healthy.</li><li>Spend a few minutes playing together.</li></ul></div><footer><span>Bonus 2  ·  A Simple Daily Cat Care Routine</span><span class="num">83</span></footer></section>
+<section class="sheet pg" id="p-b2-afternoon"><div class="hd"><h3 class="sec"><span>Afternoon</span></h3></div><div class="imgwrap" data-key="b2-afternoon">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/79_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 79">
+</div>
+</div><div class="text"><ul><li>Check the water supply.</li><li>Offer interaction or supervised play when possible.</li><li>Make sure your cat has a comfortable resting place.</li></ul></div><footer><span>Bonus 2  ·  A Simple Daily Cat Care Routine</span><span class="num">84</span></footer></section>
+<section class="sheet pg" id="p-b2-evening"><div class="hd"><h3 class="sec"><span>Evening</span></h3></div><div class="imgwrap" data-key="b2-evening">
+<div class="imgbox r21" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/80_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 80">
+</div>
+</div><div class="text"><ul><li>Provide the next planned meal.</li><li>Scoop the litter box.</li><li>Spend time playing with your cat.</li><li>Check its general behaviour.</li><li>Make sure the home is safe for the night.</li></ul>
+<p>Adjust the routine for your cat's age, health and individual needs.</p></div><footer><span>Bonus 2  ·  A Simple Daily Cat Care Routine</span><span class="num">85</span></footer></section>
+<section class="sheet opener" id="bonus3" data-nav="Bonus 3: What to Do in a Cat Emergency"><div class="hd"><p class="label">BONUS 3</p><h2 class="chtitle">What to Do in a Cat Emergency</h2></div><div class="imgwrap" data-key="bonus3">
+<div class="imgbox r169" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/81_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 81">
+</div>
+</div><div class="text"><p>When an emergency happens, staying calm can help you act quickly.</p>
+<ol><li>Move your cat away from immediate danger if it is safe to do so.</li><li>Contact a veterinary clinic or emergency veterinarian.</li><li>Describe the symptoms and when they started.</li><li>Follow the veterinarian's instructions.</li><li>Transport your cat securely in a carrier.</li><li>Bring any relevant packaging if poisoning is suspected.</li></ol>
+<p>Never induce vomiting or administer human medication unless specifically instructed by a veterinarian.</p>
+<p>Keep emergency veterinary contact information somewhere accessible.</p></div><footer><span>Bonus 3  ·  What to Do in a Cat Emergency</span><span class="num">86</span></footer></section>
+<section class="sheet opener" id="finalword" data-nav="Final Word: Your Journey as a Cat Owner Starts Here"><div class="hd"><p class="label">FINAL WORD</p><h2 class="chtitle">Your Journey as a Cat Owner Starts Here</h2></div><div class="imgwrap" data-key="finalword">
+<div class="imgbox r169" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/82_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 82">
+</div>
+</div><div class="text"><p>Owning a cat is not about being a perfect pet owner.</p>
+<p>It is about learning, paying attention and making responsible decisions every day.</p>
+<p>Your cat may take time to trust you. It may scratch furniture, knock things over or wake you up earlier than you would like. It may have a personality completely different from what you expected.</p>
+<p>Be patient.</p>
+<p>Give it a safe home, nutritious food, clean water, proper healthcare and opportunities to play and explore.</p>
+<p>Most importantly, remember that your cat depends on you.</p>
+<p>The small things you do consistently can make a significant difference to its quality of life.</p>
+<p class="sub"><strong>A happy cat starts with an informed and responsible owner.</strong></p>
+<p>Thank you for reading, and welcome to the wonderful world of cats!</p></div><footer><span>Final Word  ·  Your Journey as a Cat Owner Starts Here</span><span class="num">87</span></footer></section>
+<section class="sheet pg" id="reading" data-nav="Further Reading"><div class="hd"><h3 class="sec"><span>Recommended Further Reading</span></h3></div><div class="imgwrap" data-key="reading">
+<div class="imgbox r169" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/83_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 83">
+</div>
+</div><div class="text"><p>The following veterinary and animal welfare organisations provide additional information for cat owners:</p>
+<ol><li>Cornell University College of Veterinary Medicine — Feline Health Center: <a href="https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center" target="_blank" rel="noopener">https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center</a></li><li>American Society for the Prevention of Cruelty to Animals (ASPCA): <a href="https://www.aspca.org/pet-care/cat-care" target="_blank" rel="noopener">https://www.aspca.org/pet-care/cat-care</a></li><li>American Veterinary Medical Association (AVMA): <a href="https://www.avma.org/resources/pet-owners" target="_blank" rel="noopener">https://www.avma.org/resources/pet-owners</a></li><li>American Animal Hospital Association (AAHA): <a href="https://www.aaha.org/" target="_blank" rel="noopener">https://www.aaha.org/</a></li></ol>
+<p><em>Always consult a qualified veterinarian for advice about your individual cat.</em></p></div><footer><span>Further Reading</span><span class="num">88</span></footer></section>
+<section class="sheet cover backcover" id="backcover" data-nav="Back cover"><p class="label">The Complete Beginner's Guide to Raising a Happy, Healthy Cat</p><p class="bq">A happy cat starts with an informed and responsible owner.</p><div class="imgwrap" data-key="backcover">
+<div class="imgbox r169" data-state="full">
+<button type="button" class="pick" aria-label="Add image for this page">
+<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17" cy="20" r="3.4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 36l11-10 8 7 7-6 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+<span class="pt">Add image</span><span class="ps">Click, or drop a picture here</span>
+</button>
+<img src="images/84_style-2D-illustration-hand-drawn-cartoon-style-war.jpg" alt="Cat illustration 84">
+</div>
+</div><p class="by">Written by <span class="author">Paw Wise</span></p></section>
+</main>
+<div class="nav"><button type="button" id="prev">Previous</button><span class="pageno" id="pageno"></span><button type="button" id="listen" aria-pressed="false">Listen</button><button type="button" id="vset" aria-expanded="false" aria-controls="vpanel">Voice</button><select id="jump" aria-label="Jump to"></select><button type="button" id="next">Next</button></div>
+<div id="vpanel" hidden><label>Fish Audio voice<select id="vsel" aria-label="Fish Audio voice"><option value="404371ea0f224c17bf02e84f9061d8d5">Voice 1</option><option value="05c960cf7ded42e4a9812409988f05b4">Voice 2</option></select></label><label>Speed<select id="rsel"><option value="0.8">Slow</option><option value="1" selected>Normal</option><option value="1.2">Fast</option></select></label><p class="vnote">The next page starts automatically after narration finishes.</p><p class="vnote">Voice narration is powered by Fish Audio.</p></div>
+<input type="file" id="file" accept="image/*" hidden>
+<script>
+(function(){
+  var STYLE="Style: soft watercolor illustration, warm pastel colors, clean white background, friendly and calm, no text or letters, landscape 16:9.";
+  var PROMPTS=[["cover", "A fluffy tabby cat sitting calmly on a sunlit windowsill beside a small stack of books, a cozy home glowing behind it."], ["disclaimer", "A friendly veterinarian gently examining a calm cat on a clean clinic table."], ["introduction", "A bright living room with a new cat peeking out of an open cardboard carrier, the front door open behind it."], ["chapter1", "Close-up of a thoughtful cat with bright eyes and whiskers pointed forward, soft window light on its face."], ["1.1", "A cat lounging on one end of a sofa while its owner reads at the other end, both relaxed."], ["1.2", "Three small cat portraits in a row: tail held high in greeting, a slow blink, and flattened ears."], ["1.3", "A cat curled up asleep in a warm patch of afternoon sun, a pale dawn sky glowing through the window."], ["1.4", "A cat resting inside a cardboard box lined with a soft blanket, in a quiet corner of a room."], ["chapter2", "A kitten, an adult tabby and a fluffy long-haired cat sitting side by side, looking at the viewer."], ["2.1", "A playful kitten next to a calm adult cat, shown side by side to compare energy and size."], ["2.2", "A male and a female cat sitting together on a rug, similar size, relaxed and friendly."], ["2.3", "A person gently checking a cat's bright, clear eyes at an animal shelter."], ["2.4", "A person at a table with a calendar, notebook and calculator, a cat sitting on the chair beside them."], ["chapter3", "A tidy empty living room being prepared for a cat, with a cat tree and a carrier waiting in the corner."], ["3.1", "Overhead flat lay of cat essentials: food and water bowls, litter box, scratching post, carrier, bed and toys."], ["3.2", "A cat-proofed living room with cables tucked away, a secured window and a cat looking up at a high shelf."], ["3.3", "A small quiet room with a cat bed, bowls on one side, a litter box in a far corner and a hiding box."], ["chapter4", "An owner carrying a cat carrier through the front door of a warm, welcoming home."], ["4.1", "An open carrier on the floor of a quiet room, a cat cautiously stepping out on its own."], ["4.2", "An owner sitting on the floor at a respectful distance while a cat slowly approaches."], ["4.3", "A cat and a dog looking at each other calmly through a baby gate."], ["4.4", "A vet and an owner with a cat on an examination table, a clipboard and health records nearby."], ["chapter5", "A cat eating from a bowl on a kitchen floor, a water bowl beside it."], ["5.1", "A cat sitting beside a bowl of chicken and fish pieces, looking up with interest."], ["5.2", "A bowl of wet food on the left and a bowl of dry kibble on the right, a cat deciding between them."], ["5.3", "A small kitten eating from a tiny dish while an owner's hand rests nearby."], ["5.4", "An adult cat beside a measured portion of food on a kitchen scale with a scoop."], ["5.5", "A table with chocolate, onions, garlic, grapes and a coffee cup, a hand gently keeping a curious cat away."], ["5.6", "A cat drinking from a quiet ceramic water fountain in a bright kitchen."], ["chapter6", "A clean litter box in a quiet corner of a bathroom, a cat approaching it calmly."], ["6.1", "A spacious open litter box with a cat comfortably turning around inside it."], ["6.2", "A top-down floor plan of a home, a quiet litter spot marked away from the kitchen and busy hallway."], ["6.3", "An owner gently placing a sleepy kitten near a litter box after a nap, smiling."], ["6.4", "A hand scooping a litter box with a small scoop, a waste bag and a mild cleaner bottle nearby."], ["6.5", "A worried cat sitting beside a litter box while its owner crouches nearby, thinking."], ["chapter7", "A cat being groomed with a soft brush on a sunny couch."], ["7.1", "A soft brush gliding over a long-haired cat's fur, loose fur collecting on the bristles."], ["7.2", "A cat standing in a shallow bath of warm water, an owner holding it gently, cat shampoo on the edge."], ["7.3", "Close-up of a cat's paw held gently, a pet nail clipper approaching only the sharp tip of a claw."], ["7.4", "An owner gently checking a cat's ear and eye in good light."], ["7.5", "A cat toothbrush and a tube of cat toothpaste beside a calm cat with its mouth slightly open."], ["chapter8", "A cat mid-stretch on a wooden floor, expressive and relaxed."], ["8.1", "A cat stretching up tall against a sisal scratching post."], ["8.2", "A kitten play-biting a feather wand toy while the owner's hand stays safely away."], ["8.3", "A cat kneading a soft blanket with half-closed, content eyes."], ["8.4", "A cat proudly placing a toy mouse at its owner's feet in a doorway."], ["8.5", "A cat sitting by the kitchen door, mouth open in a meow, looking up at its owner."], ["8.6", "A calm owner kneeling at the cat's level and offering a toy, the cat relaxed and curious."], ["chapter9", "A veterinary clinic room with a cat in a carrier and a medical bag on the counter."], ["9.1", "A cat sitting calmly on a clinic scale while a vet looks on."], ["9.2", "A vet preparing a vaccination for a calm kitten, a vaccination record booklet on the table."], ["9.3", "A vet applying a spot-on parasite treatment to the back of a cat's neck."], ["9.4", "A tired cat lying alone beside an untouched food bowl."], ["9.5", "An owner hurrying toward a clinic door with a cat in a carrier."], ["9.6", "A vet talking with an owner at a desk about a cat's care plan, a calm cat in the owner's lap."], ["chapter10", "Several tiny kittens snuggled together in a soft basket."], ["10.1", "A hand holding a small bottle of kitten milk replacer for a tiny kitten."], ["10.2", "A kitten sniffing a friendly visitor's outstretched hand in a living room."], ["10.3", "A kitten pouncing on a small ball near a colorful cat tunnel."], ["10.4", "A kitten sleeping deeply in a warm bed under a soft blanket."], ["10.5", "A tiny kitten on a vet's table with a stethoscope and a records folder nearby."], ["chapter11", "An indoor cat perched at a bright window, looking out over a green garden."], ["11.1", "An owner playing with a cat using a wand toy, the cat mid-pounce."], ["11.2", "A tall, sturdy cat tree with a cat resting on the top perch."], ["11.3", "A cat working at a puzzle feeder, a basket of rotating toys beside it."], ["11.4", "A cat on a harness walking beside its owner in a small enclosed garden."], ["11.5", "A cat wearing a breakaway collar with a small identification tag."], ["chapter12", "A slightly overwhelmed new owner surrounded by cat items while a cat watches calmly."], ["m1", "An overflowing cat bowl next to a round, well-fed cat standing on a bathroom scale."], ["m2", "A glass bowl of fresh water offered to a cat instead of a saucer of milk."], ["m3", "A healthy-looking cat sitting on a vet's examination table for a routine check."], ["m4", "A cat happily scratching a post while a patient owner watches from the sofa."], ["m5", "Two bowls side by side, old food and new food being mixed gradually, a cat sniffing them."], ["m6", "A cat near a tangle of cables and a cleaning spray bottle in a living room."], ["m7", "A cat hiding under a bed with only its eyes visible in the shadows."], ["m8", "A cat wriggling away from a hug while its owner learns to read its body language."], ["m9", "A friend feeding a cat in the kitchen while the owner packs a suitcase in the background."], ["m10", "A person searching on a laptop with a concerned look while a cat sits beside them."], ["bonus1", "A neat flat lay of cat supplies arranged around a clipboard with tick marks and no text."], ["b1-supplies", "Overhead flat lay of cat food, bowls, litter box, scratching post, carrier, bed, toys and brush."], ["b1-home", "A cat-proofed home corner with a secured window, tucked cables and a quiet room prepared."], ["b1-health", "A cat carrier, a vaccination booklet and a vet's bag at the door of a clinic."], ["bonus2", "A sunrise-to-sunset strip showing a cat's day at home across morning, afternoon and evening."], ["b2-morning", "A sunrise kitchen where an owner fills a bowl while a cat waits at their feet."], ["b2-afternoon", "A cat napping near a window with a fresh water bowl close by."], ["b2-evening", "An owner and a cat playing with a wand toy in warm lamplight."], ["bonus3", "An owner calmly holding a cat carrier in one hand and a phone in the other, calling the vet."], ["finalword", "A happy cat on its owner's lap in a warm living room at golden hour."], ["reading", "A small bookshelf with veterinary guide books and a cat sitting on top."], ["backcover", "A cat silhouette sitting at a window at dusk, a trail of paw prints crossing a warm yellow wall behind it."]];
+  var mem={}, db=null;
+  function openDB(){return new Promise(function(res){
+    try{var r=indexedDB.open("cat-book-images",1);
+      r.onupgradeneeded=function(){r.result.createObjectStore("imgs")};
+      r.onsuccess=function(){res(r.result)};r.onerror=function(){res(null)};
+    }catch(e){res(null)}
+  })}
+  function dbGet(k){return new Promise(function(res){
+    if(!db){res(mem[k]||null);return}
+    try{var q=db.transaction("imgs").objectStore("imgs").get(k);q.onsuccess=function(){res(q.result||null)};q.onerror=function(){res(mem[k]||null)}}catch(e){res(mem[k]||null)}
+  })}
+  function dbPut(k,v){mem[k]=v;if(!db)return;try{db.transaction("imgs","readwrite").objectStore("imgs").put(v,k)}catch(e){}}
+  function dbDel(k){delete mem[k];if(!db)return;try{db.transaction("imgs","readwrite").objectStore("imgs").delete(k)}catch(e){}}
+
+  var wraps=[].slice.call(document.querySelectorAll(".imgwrap"));
+  var countEl=document.getElementById("count");
+  function updateCount(){
+    var n=wraps.filter(function(w){return w.querySelector(".imgbox").dataset.state==="full"}).length;
+    countEl.textContent=n+" of "+wraps.length+" images added";
+  }
+  function setImage(w,src){
+    var box=w.querySelector(".imgbox"),img=box.querySelector("img");
+    if(src){img.src=src;img.hidden=false;box.dataset.state="full"}
+    else{img.removeAttribute("src");img.hidden=true;box.dataset.state="empty"}
+    updateCount();
+  }
+  function shrink(file){return new Promise(function(res,rej){
+    var url=URL.createObjectURL(file),im=new Image();
+    im.onload=function(){
+      var max=1600,s=Math.min(1,max/Math.max(im.naturalWidth,im.naturalHeight));
+      var c=document.createElement("canvas");c.width=Math.round(im.naturalWidth*s);c.height=Math.round(im.naturalHeight*s);
+      c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+      URL.revokeObjectURL(url);res(c.toDataURL("image/jpeg",0.86));
+    };
+    im.onerror=function(){URL.revokeObjectURL(url);rej()};
+    im.src=url;
+  })}
+  function load(w,file){
+    if(!file||file.type.indexOf("image/")!==0)return;
+    shrink(file).then(function(d){dbPut(w.dataset.key,d);setImage(w,d)}).catch(function(){});
+  }
+  var fileInput=document.getElementById("file"),target=null;
+  fileInput.addEventListener("change",function(){if(target&&fileInput.files[0])load(target,fileInput.files[0]);fileInput.value=""});
+  function choose(w){target=w;fileInput.click()}
+  wraps.forEach(function(w){
+    var box=w.querySelector(".imgbox");
+    w.querySelector(".pick").addEventListener("click",function(){choose(w)});
+    ["dragenter","dragover"].forEach(function(t){box.addEventListener(t,function(e){e.preventDefault();box.classList.add("drag")})});
+    ["dragleave","drop"].forEach(function(t){box.addEventListener(t,function(e){e.preventDefault();box.classList.remove("drag")})});
+    box.addEventListener("drop",function(e){var f=e.dataTransfer&&e.dataTransfer.files[0];if(f)load(w,f)});
+  });
+  openDB().then(function(d){
+    db=d;
+    return Promise.all(wraps.map(function(w){return dbGet(w.dataset.key).then(function(v){if(v){mem[w.dataset.key]=v;setImage(w,v)}})}));
+  }).then(updateCount);
+  updateCount();
+
+
+  /* page-by-page mode */
+  var sheets=[].slice.call(document.querySelectorAll(".sheet")),cur=0,paged=true,mode="paged",listening=false;
+  var segBtns=[].slice.call(document.querySelectorAll(".seg button")),fsB=document.getElementById("fs"),prevB=document.getElementById("prev"),nextB=document.getElementById("next"),pageno=document.getElementById("pageno"),jump=document.getElementById("jump");
+  try{var sm=localStorage.getItem("cat-book-mode");if(sm==="scroll"||sm==="slides")mode=sm}catch(e){}
+  paged=mode!=="scroll";
+  var navIdx=[];
+  sheets.forEach(function(s,i){var n=s.getAttribute("data-nav");if(n){navIdx.push(i);var o=document.createElement("option");o.value=i;o.textContent=n;jump.appendChild(o)}});
+  function show(i,keepScroll){
+    cur=Math.max(0,Math.min(sheets.length-1,i));
+    sheets.forEach(function(s,k){s.classList.toggle("current",k===cur)});
+    pageno.textContent=(cur+1)+" / "+sheets.length;
+    prevB.disabled=cur===0;nextB.disabled=cur===sheets.length-1;
+    var best=navIdx[0];navIdx.forEach(function(k){if(k<=cur)best=k});jump.value=best;
+    if(!keepScroll)window.scrollTo(0,0);
+    if(listening)startReading();
+  }
+  function setMode(m){
+    mode=m;paged=m!=="scroll";
+    document.body.classList.toggle("paged",paged);document.body.classList.toggle("slides",m==="slides");
+    segBtns.forEach(function(b){b.setAttribute("aria-pressed",b.getAttribute("data-mode")===m?"true":"false")});
+    fsB.hidden=m!=="slides"||fsBroken;
+    try{localStorage.setItem("cat-book-mode",m)}catch(e){}
+    if(paged)show(cur,true);else{stopReading();sheets[cur].scrollIntoView()}
+  }
+  var fsBroken=false;
+  function go(i){if(paged)show(i);else sheets[Math.max(0,Math.min(sheets.length-1,i))].scrollIntoView()}
+  prevB.addEventListener("click",function(){show(cur-1)});
+  nextB.addEventListener("click",function(){show(cur+1)});
+  jump.addEventListener("change",function(){show(parseInt(jump.value,10))});
+  segBtns.forEach(function(b){b.addEventListener("click",function(){
+    if(!paged){var y=window.scrollY+120,k=0;sheets.forEach(function(s,i){if(s.offsetTop<=y)k=i});cur=k}
+    setMode(b.getAttribute("data-mode"));
+  })});
+  fsB.addEventListener("click",function(){
+    try{
+      if(document.fullscreenElement){document.exitFullscreen()}
+      else{var r=document.documentElement.requestFullscreen();if(r&&r.catch)r.catch(function(){fsBroken=true;fsB.hidden=true})}
+    }catch(e){fsBroken=true;fsB.hidden=true}
+  });
+  document.addEventListener("click",function(e){
+    var a=e.target.closest&&e.target.closest('a[href^="#"]');if(!a)return;
+    var t=document.getElementById(a.getAttribute("href").slice(1));
+    var i=sheets.indexOf(t);if(i<0)return;
+    e.preventDefault();go(i);
+  });
+  document.addEventListener("keydown",function(e){
+    if(!paged||e.ctrlKey||e.metaKey||e.altKey)return;
+    var tg=e.target,tn=tg&&tg.tagName;
+    if(tn==="INPUT"||tn==="TEXTAREA"||tn==="SELECT"||(tg&&tg.isContentEditable))return;
+    if(e.key==="ArrowRight")show(cur+1);else if(e.key==="ArrowLeft")show(cur-1);
+  });
+  var sx=0,sy=0;
+  document.addEventListener("touchstart",function(e){if(e.touches.length===1){sx=e.touches[0].clientX;sy=e.touches[0].clientY}},{passive:true});
+  document.addEventListener("touchend",function(e){
+    if(!paged||!e.changedTouches.length)return;
+    var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)>80&&Math.abs(dx)>2*Math.abs(dy))show(cur+(dx<0?1:-1));
+  },{passive:true});
+  /* author name, shared between title page and back cover */
+  var authors=[].slice.call(document.querySelectorAll(".author"));
+
+  /* read aloud with Fish Audio, with page audio caching */
+  var runId=0,currentAudio=null,audioCacheName="cat-book-fish-audio-v1";
+  var listenB=document.getElementById("listen"),vsetB=document.getElementById("vset"),vpanel=document.getElementById("vpanel"),vsel=document.getElementById("vsel"),rsel=document.getElementById("rsel"),autoC=document.getElementById("autoc");
+  function numberWords(n){
+    var small=["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"],tens=["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"];
+    n=parseInt(n,10);if(n<20)return small[n];if(n<100)return tens[Math.floor(n/10)]+(n%10?" "+small[n%10]:"");if(n<1000)return small[Math.floor(n/100)]+" hundred"+(n%100?" "+numberWords(n%100):"");return String(n).split("").map(function(d){return small[parseInt(d,10)]}).join(" ");
+  }
+  function wordsOnly(t){return (t||"").replace(/\d+(?:\.\d+)?/g,function(value){return value.split(".").map(numberWords).join(" point ")})}
+  function pageText(s){
+    var out=[];
+    function add(t){t=wordsOnly(t).replace(/https?:\/\/\S+/g,"").replace(/\s+/g," ").trim();if(!t)return;if(!/[.!?:;]$/.test(t))t+=".";out.push(t)}
+    if(s.id==="contents"){add("Contents");s.querySelectorAll(".tt").forEach(function(e){add(e.textContent)});return out}
+    s.querySelectorAll("h1,h2,h3,p,li").forEach(function(e){if(e.closest("footer")||e.closest(".by")||e.closest(".imgwrap"))return;add(e.textContent)});
+    return out;
+  }
+  function textHash(value){var h=2166136261;for(var i=0;i<value.length;i++){h^=value.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0).toString(36)}
+  function cacheRequest(sheet,text){var pageId=sheet.id||("page-"+sheets.indexOf(sheet));return new Request("/_fish-audio-cache/"+pageId+"-"+vsel.value+"-"+textHash(text)+".mp3")}
+  async function getAudioBlob(sheet,text){
+    var request=cacheRequest(sheet,text),cache=null;
+    try{if("caches" in window){cache=await caches.open(audioCacheName);var saved=await cache.match(request);if(saved)return await saved.blob()}}catch(e){}
+    var response=await fetch("/api/tts",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text:text,reference_id:vsel.value})});
+    if(!response.ok)throw new Error("Voice request failed");
+    if(cache){try{await cache.put(request,response.clone())}catch(e){}}
+    return await response.blob();
+  }
+  function preloadPage(index){
+    if(index<0||index>=sheets.length)return;
+    var sheet=sheets[index],text=pageText(sheet).join(" ");
+    if(!text)return;
+    getAudioBlob(sheet,text).catch(function(){});
+  }
+  function setListenUI(on,label){listenB.setAttribute("aria-pressed",on?"true":"false");listenB.textContent=label||(on?"Stop":"Listen")}
+  function stopReading(){listening=false;runId++;if(currentAudio){currentAudio.pause();URL.revokeObjectURL(currentAudio.src);currentAudio=null}setListenUI(false)}
+  async function startReading(){
+    var id=++runId,sheet=sheets[cur],text=pageText(sheet).join(" ");
+    if(!text)return;
+    listening=true;setListenUI(true,"Loading…");
+    try{
+      var audio=new Audio(URL.createObjectURL(await getAudioBlob(sheet,text)));if(id!==runId){URL.revokeObjectURL(audio.src);return}
+      currentAudio=audio;audio.playbackRate=parseFloat(rsel.value)||1;
+      audio.onended=function(){if(id!==runId)return;currentAudio=null;if(cur<sheets.length-1){show(cur+1)}else{stopReading()}};
+      audio.onerror=function(){if(id===runId)stopReading()};
+      setListenUI(true,"Stop");await audio.play();
+      window.setTimeout(function(){if(id===runId)preloadPage(cur+1)},250);
+    }catch(e){if(id===runId){stopReading();alert("Fish Audio narration is unavailable. When the book is deployed, add the FISH_AUDIO_API_KEY secret in Cloudflare Pages.")}}
+  }
+  listenB.addEventListener("click",function(){if(listening)stopReading();else startReading()});
+  vsetB.addEventListener("click",function(){var open=vpanel.hidden;vpanel.hidden=!open;vsetB.setAttribute("aria-expanded",open?"true":"false")});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!vpanel.hidden){vpanel.hidden=true;vsetB.setAttribute("aria-expanded","false")}});
+  vsel.addEventListener("change",function(){if(listening){stopReading();startReading()}});
+  rsel.addEventListener("change",function(){if(currentAudio)currentAudio.playbackRate=parseFloat(rsel.value)||1});
+  window.addEventListener("pagehide",stopReading);
+  setMode(mode);
+})();
+</script>
+
+</body></html>
